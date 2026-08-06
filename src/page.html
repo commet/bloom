@@ -171,7 +171,7 @@ h1, h2, h3 { margin: 0; font-family: var(--ko); font-weight: 800; letter-spacing
 .facts span { display: block; font-size: .74rem; color: var(--text-muted); margin-top: .1rem; }
 
 /* ── sections ────────────────────────────────────────── */
-section { padding-top: clamp(2.4rem, 6vw, 4rem); scroll-margin-top: 52px; }
+main > section { padding-top: clamp(2.4rem, 6vw, 4rem); scroll-margin-top: 52px; }
 .shead { display: flex; align-items: baseline; gap: .8rem; flex-wrap: wrap; margin-bottom: .9rem; }
 .shead h2 { font-size: clamp(1.15rem, 1.02rem + .7vw, 1.55rem); }
 .shead .note { font-size: .8rem; color: var(--text-muted); }
@@ -384,40 +384,114 @@ details.method[open] > summary::after { rotate: -135deg; }
 .dhead .x { margin-left: auto; flex: none; background: none; border: 1px solid var(--border); border-radius: 4px; width: 30px; height: 30px; cursor: pointer; color: var(--text-secondary); display: grid; place-items: center; }
 .dhead .x:hover { border-color: var(--border-strong); color: var(--text-primary); }
 .dhead .x svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; }
-.dbody { overflow-y: auto; padding: 1.1rem var(--pad) 3rem; overscroll-behavior: contain; }
-.dbody dl { display: grid; grid-template-columns: 4.4rem 1fr; gap: .28rem .8rem; font-size: .85rem; margin: 0 0 1.2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
-.dbody dt { color: var(--text-muted); font-size: .7rem; font-family: var(--disp); font-weight: 600; letter-spacing: .07em; text-transform: uppercase; padding-top: .35em; }
-.dbody dd { margin: 0; color: var(--text-secondary); }
-.dbody dd b { color: var(--text-primary); font-weight: 600; }
-.dbody h4 { font-family: var(--ko); font-weight: 800; font-size: .95rem; letter-spacing: -.03em; margin: 1.4rem 0 .3rem; }
-.dbody p { margin: 0 0 .65rem; color: var(--text-secondary); }
-.dbody p.lead { color: var(--text-primary); }
-.dbody blockquote { margin: 1.1rem 0; padding-left: .9rem; border-left: 2px solid var(--text-primary); }
-.dbody blockquote p { font-family: var(--ko); font-weight: 700; color: var(--text-primary); letter-spacing: -.025em; margin-bottom: .3rem; }
-.dbody cite { font-style: normal; font-size: .76rem; color: var(--text-muted); }
-.dbody .sp { list-style: none; padding: 0; margin: 0 0 .4rem; }
-.dbody .sp li { padding: .4rem 0; border-bottom: 1px solid var(--border); font-size: .88rem; }
-.dbody .sp b { font-family: var(--ko); font-weight: 800; color: var(--text-primary); }
-.dbody .sp em { font-style: normal; display: block; font-size: .8rem; color: var(--text-muted); margin-top: .1rem; }
-.dbody .grp { margin: .85rem 0; }
-.dbody .grp > b { display: block; font-family: var(--disp); font-weight: 700; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .2rem; }
-.dbody ul { margin: 0; padding-left: 1rem; }
-.dbody li { color: var(--text-secondary); margin-bottom: .3rem; font-size: .89rem; }
+.dbody { overflow-y: auto; padding: 1.3rem var(--pad) 4rem; overscroll-behavior: contain; }
+.dbody > *:first-child { margin-top: 0; }
+
+/* 요약 — 들어오자마자 읽히는 지점 */
+.dbody .lead {
+  font-size: 1.03rem; line-height: 1.72; color: var(--text-primary); margin: 0 0 .7rem; max-width: 34em;
+}
+.dbody .tags.first { margin: 0 0 1rem; }
+
+/* 대표 발언 — 시선을 잡는 앵커 */
+.dbody .pull { margin: 1.5rem 0 .4rem; padding: 1rem 0 0; border-top: 2px solid var(--text-primary); }
+.dbody .pull p {
+  font-family: var(--ko); font-weight: 800; font-size: 1.16rem; line-height: 1.5;
+  letter-spacing: -.032em; color: var(--text-primary); margin: 0 0 .45rem;
+}
+.dbody .pull figcaption { font-size: .78rem; color: var(--text-muted); }
+
+/* 구역 — 라벨과 괘선으로 층을 만든다 */
+.dsec { margin-top: 2.1rem; padding-top: 0; }
+.dsec > h4 {
+  display: flex; align-items: baseline; gap: .5rem; margin: 0 0 .9rem;
+  font-family: var(--disp); font-weight: 700; font-size: .66rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--text-muted);
+  padding-bottom: .4rem; border-bottom: 1px solid var(--border-strong);
+}
+.dsec > h4 em { font-style: normal; margin-left: auto; font-variant-numeric: tabular-nums; font-size: .92em; }
+
+/* 개요 — 여섯 줄 목록 대신 훑는 격자 */
+.spec { display: grid; grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr)); gap: .95rem 1.3rem; margin: 0; }
+.spec dt { font-family: var(--disp); font-weight: 700; font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); }
+.spec dd { margin: .15rem 0 0; font-size: .88rem; line-height: 1.5; color: var(--text-primary); }
+.spec dd b { font-weight: 700; }
+.spec .none { color: var(--text-muted); }
+.dbody .fmt { margin: 1.1rem 0 0; font-size: .86rem; color: var(--text-secondary); line-height: 1.6; }
+.dbody .fmt span {
+  display: inline-block; font-family: var(--disp); font-weight: 700; font-size: .62rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--text-muted); margin-right: .5rem; vertical-align: 1px;
+}
+
+/* 연사 */
+.dbody .sp { list-style: none; padding: 0; margin: 0; }
+.dbody .sp li { padding: .55rem 0; border-bottom: 1px solid var(--border); }
+.dbody .sp li:last-child { border-bottom: 0; padding-bottom: 0; }
+.dbody .sp b { font-family: var(--ko); font-weight: 800; letter-spacing: -.02em; margin-right: .45rem; }
+.dbody .sp span { font-size: .87rem; color: var(--text-secondary); }
+.dbody .sp em { display: block; font-style: normal; font-size: .81rem; color: var(--text-muted); margin-top: .25rem; line-height: 1.55; }
+
+/* 내용 */
+.dbody h5.sub {
+  font-family: var(--ko); font-weight: 800; font-size: 1rem; letter-spacing: -.03em;
+  margin: 1.7rem 0 .4rem; color: var(--text-primary);
+}
+.dsec h5.sub:first-child { margin-top: 0; }
+.dbody p { margin: 0 0 .7rem; color: var(--text-secondary); line-height: 1.75; max-width: 36em; }
+
+/* 발언 */
+.dbody blockquote { margin: 0 0 1.2rem; padding-left: .95rem; border-left: 2px solid var(--border-strong); }
+.dbody blockquote:last-child { margin-bottom: 0; }
+.dbody blockquote p {
+  font-family: var(--ko); font-weight: 700; font-size: .97rem; line-height: 1.6; letter-spacing: -.025em;
+  color: var(--text-primary); margin-bottom: .3rem;
+}
+.dbody cite { font-style: normal; font-size: .77rem; color: var(--text-muted); }
+
+/* 조별 토론 */
+.dbody .grp { margin: 0 0 1.3rem; }
+.dbody .grp:last-child { margin-bottom: 0; }
+.dbody .grp > b {
+  display: block; font-family: var(--ko); font-weight: 800; font-size: .93rem; letter-spacing: -.025em;
+  color: var(--text-primary); margin-bottom: .4rem;
+}
+.dbody ul { margin: 0; padding-left: 1.05rem; }
+.dbody li { color: var(--text-secondary); margin-bottom: .38rem; font-size: .89rem; line-height: 1.65; }
 .dbody li::marker { color: var(--border-strong); }
-.dbody table { width: 100%; border-collapse: collapse; font-size: .82rem; margin: .4rem 0 1rem; }
-.dbody th { text-align: left; font-family: var(--disp); font-weight: 700; font-size: .66rem; letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border-strong); padding: .25rem .6rem .25rem 0; }
-.dbody td { border-bottom: 1px solid var(--border); padding: .4rem .6rem .4rem 0; color: var(--text-secondary); vertical-align: top; }
-.dbody td:first-child { color: var(--text-primary); font-weight: 600; }
-.dbody .box { background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; padding: .9rem 1rem; margin: 1.1rem 0; }
-.dbody .box .lbl { display: block; margin-bottom: .45rem; }
-.dbody .box h5 { font-family: var(--disp); font-weight: 700; font-size: .8rem; margin: .85rem 0 .2rem; color: var(--text-primary); }
-.dbody .box h5:first-of-type { margin-top: 0; }
-.dbody .box p { font-size: .87rem; margin-bottom: .45rem; }
-.dbody .links { margin-top: 1.2rem; padding-top: .9rem; border-top: 1px solid var(--border); }
+
+/* 표 */
+.dbody .tw { overflow-x: auto; margin: .5rem 0 1rem; }
+.dbody table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+.dbody th {
+  text-align: left; font-family: var(--disp); font-weight: 700; font-size: .62rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border-strong);
+  padding: .3rem .7rem .3rem 0; white-space: nowrap;
+}
+.dbody td { border-bottom: 1px solid var(--border); padding: .45rem .7rem .45rem 0; color: var(--text-secondary); vertical-align: top; line-height: 1.55; }
+.dbody td:first-child { color: var(--text-primary); font-weight: 600; overflow-wrap: normal; }
+
+/* 회고·피드백 */
+.dbody .box { background: var(--surface-2); border-radius: 8px; padding: 1rem 1.15rem; margin: 0 0 1.1rem; }
+.dbody .box:last-child { margin-bottom: 0; }
+.dbody .box .lbl { display: block; margin-bottom: .6rem; }
+.dbody .box h6 {
+  font-family: var(--disp); font-weight: 700; font-size: .78rem; letter-spacing: .01em;
+  margin: 1rem 0 .25rem; color: var(--text-primary);
+}
+.dbody .box h6:first-of-type { margin-top: 0; }
+.dbody .box p { font-size: .87rem; margin-bottom: .5rem; max-width: none; }
+.dbody .box p:last-child { margin-bottom: 0; }
+.dbody .box .tail { color: var(--text-muted); border-top: 1px solid var(--border); padding-top: .7rem; margin-top: .8rem; }
+
+/* 자료 */
+.dbody .links { display: flex; flex-wrap: wrap; gap: .35rem 1rem; }
+.dbody .links a { font-size: .82rem; color: var(--text-secondary); display: inline-flex; align-items: center; gap: .3rem; }
+.dbody .links a:hover { color: var(--text-primary); }
+.dbody .links svg { width: 9px; height: 9px; stroke: currentColor; fill: none; stroke-width: 2; flex: none; }
 .dbody .tags { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: 1rem; }
-.dbody .tags span { font-size: .72rem; color: var(--text-muted); border: 1px solid var(--border); border-radius: 99px; padding: .05rem .45rem; }
+.dbody .tags span { font-size: .73rem; color: var(--text-muted); border: 1px solid var(--border); border-radius: 99px; padding: .08rem .5rem; }
 .dbody .tags span.f { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 45%, transparent); }
-.dbody .note { font-size: .8rem; color: var(--text-muted); border-left: 1px solid var(--border-strong); padding-left: .75rem; margin: .8rem 0 0; }
+.dbody .note { font-size: .81rem; color: var(--text-muted); border-left: 1px solid var(--border-strong); padding-left: .8rem; margin: .8rem 0 0; }
 </style>
 
 <nav class="bar" aria-label="섹션">
@@ -912,8 +986,8 @@ const repeats = Object.entries(venueCount).filter(([, n]) => n > 1)
 
 /* 규모 — 참석과 신청은 모두 '사람 수'라 한 축을 공유한다. 계열은 색과 범례로 구분. */
 const scaleRows = [
-  ...E.filter(e => e.attendees).map(e => ({ k: `${md(e)} ${e.short}`, v: e.attendees, kind: '참석' })),
-  ...E.filter(e => e.applicants).map(e => ({ k: `${md(e)} ${e.short}`, v: e.applicants, kind: '신청' })),
+  ...E.filter(e => e.attendees).map(e => ({ k: `${md(e)} ${e.short} · 참석`, v: e.attendees, kind: '참석' })),
+  ...E.filter(e => e.applicants).map(e => ({ k: `${md(e)} ${e.short} · 신청`, v: e.applicants, kind: '신청' })),
 ].sort((a, b) => b.v - a.v);
 
 /* 월별 개최 횟수를 형식으로 쌓는다 — 4월 강연 → 5·6월 라운드테이블 중심의 이동이 보인다 */
@@ -973,7 +1047,7 @@ function growthChart() {
 $('#charts').innerHTML =
   monthMix()
   + barChart('장소별 개최 횟수', '2회 이상 사용된 장소. 운영 주체 기준.', repeats, '회')
-  + barChart('공개된 규모', '참석 또는 신청 인원이 기록에 남은 회차.', scaleRows, '명')
+  + barChart('공개된 규모', '신청과 참석은 다른 수치입니다. 기록에 남은 것만 표시했습니다.', scaleRows, '명')
   + growthChart();
 
 /* ── 다음 ────────────────────────────────────────────── */
@@ -1007,62 +1081,91 @@ const drawer = $('#drawer'), scrim = $('#scrim'), dbody = $('#dbody');
 let lastFocus = null;
 
 function detail(e) {
+  const sec = (label, count, body) => body
+    ? `<section class="dsec"><h4>${esc(label)}${count ? `<em>${count}</em>` : ''}</h4>${body}</section>`
+    : '';
+
+  /* 1. 무엇이었는지부터 — 요약이 먼저 오고, 대표 발언이 시선을 잡는다 */
   let h = '';
+  if (e.firsts && e.firsts.length) {
+    h += `<div class="tags first">${e.firsts.map(f => `<span class="f">${T(f)}</span>`).join('')}</div>`;
+  }
+  (e.summary || []).forEach(x => { h += `<p class="lead">${T(x)}</p>`; });
+
+  const quotes = (e.quotes || []).slice();
+  const pinIx = quotes.findIndex(q => q.pin);
+  const pin = pinIx >= 0 ? quotes.splice(pinIx, 1)[0] : null;
+  if (pin) h += `<figure class="pull"><p>${T(pin.t)}</p><figcaption>${T(pin.s)}</figcaption></figure>`;
+
+  /* 2. 개요 — 6줄 목록 대신 훑어보는 격자 */
   const scale = [];
   if (e.applicants) scale.push(`신청 ${e.applicantsNote || e.applicants + '명'}`);
   if (e.attendees) scale.push(`참석 ${e.attendeesNote || e.attendees + '명'}`);
   if (e.capacity) scale.push(`정원 ${e.capacity}명`);
+  const spec = [
+    ['장소', e.venue ? esc(e.venue) + (e.floor ? ` <b>${esc(e.floor)}</b>` : '') : '<span class="none">기록 없음</span>'],
+    ['시간', e.time ? esc(e.time) : '<span class="none">기록 없음</span>'],
+    ['규모', scale.length ? scale.join(' · ') : '<span class="none">공개되지 않음</span>'],
+    ['후원', e.sponsors && e.sponsors.length ? e.sponsors.map(esc).join(' · ') : '<span class="none">기록 없음</span>'],
+    ['구분', `${KIND[e.kind]} · ${LANG[e.lang]}${e.paid ? ' · 유료' : ''}`],
+  ];
+  h += sec('개요', 0,
+    `<dl class="spec">${spec.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>`
+    + (e.format ? `<p class="fmt"><span>진행</span>${esc(e.format)}</p>` : ''));
 
-  const rows = [['장소', e.venue ? esc(e.venue) + (e.floor ? ` <b>${esc(e.floor)}</b>` : '') : '<span style="color:var(--text-muted)">기록 없음</span>']];
-  if (e.time) rows.push(['시간', esc(e.time)]);
-  if (e.sponsors && e.sponsors.length) rows.push(['후원', e.sponsors.map(esc).join(' · ')]);
-  rows.push(['규모', scale.length ? scale.join(' · ') : '<span style="color:var(--text-muted)">공개되지 않음</span>']);
-  if (e.format) rows.push(['포맷', esc(e.format)]);
-  rows.push(['구분', `${KIND[e.kind]} · ${LANG[e.lang]}${e.paid ? ' · 유료' : ''}`]);
-  h += `<dl>${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>`;
+  /* 3. 연사 */
+  h += sec('연사', (e.speakers || []).length, e.speakers && e.speakers.length
+    ? `<ul class="sp">${e.speakers.map(x =>
+        `<li><b>${T(x.n)}</b><span>${T(x.a)}</span>${x.note ? `<em>${T(x.note)}</em>` : ''}</li>`).join('')}</ul>`
+    : '');
 
-  if (e.firsts && e.firsts.length) {
-    h += `<div class="tags" style="margin:-.5rem 0 1.1rem">${e.firsts.map(f => `<span class="f">${esc(f)}</span>`).join('')}</div>`;
-  }
-  (e.summary || []).forEach(p => { h += `<p class="lead">${T(p)}</p>`; });
-
-  if (e.speakers && e.speakers.length) {
-    h += `<h4>연사</h4><ul class="sp">${e.speakers.map(s =>
-      `<li><b>${T(s.n)}</b> ${T(s.a)}${s.note ? `<em>${T(s.note)}</em>` : ''}</li>`).join('')}</ul>`;
-  }
-
+  /* 4. 내용 */
+  let bodyHtml = '';
   (e.body || []).forEach(b => {
-    h += `<h4>${T(b.h)}</h4>`;
-    if (b.p) h += `<p>${T(b.p)}</p>`;
-    if (b.table) h += `<table><thead><tr>${b.table.head.map(x => `<th>${esc(x)}</th>`).join('')}</tr></thead><tbody>${
-      b.table.rows.map(r => `<tr>${r.map(c => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
-    if (b.note) h += `<p class="note">${esc(b.note)}</p>`;
+    bodyHtml += `<h5 class="sub">${T(b.h)}</h5>`;
+    if (b.p) bodyHtml += `<p>${T(b.p)}</p>`;
+    if (b.table) bodyHtml += `<div class="tw"><table><thead><tr>${b.table.head.map(x => `<th>${esc(x)}</th>`).join('')}</tr></thead><tbody>${
+      b.table.rows.map(r => `<tr>${r.map(c => `<td>${T(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+    if (b.note) bodyHtml += `<p class="note">${esc(b.note)}</p>`;
   });
+  h += sec('내용', 0, bodyHtml);
 
-  (e.quotes || []).forEach(q => { h += `<blockquote><p>${T(q.t)}</p><cite>${T(q.s)}</cite></blockquote>`; });
+  /* 5. 나머지 발언 */
+  h += sec('발언', quotes.length, quotes.length
+    ? quotes.map(q => `<blockquote><p>${T(q.t)}</p><cite>${T(q.s)}</cite></blockquote>`).join('')
+    : '');
 
-  if (e.tables && e.tables.length) {
-    h += `<h4>조별 토론 정리</h4>`;
-    e.tables.forEach(t => { h += `<div class="grp"><b>${T(t.who)}</b><ul>${t.pts.map(p => `<li>${T(p)}</li>`).join('')}</ul></div>`; });
-  }
+  /* 6. 조별 토론 */
+  h += sec('조별 토론', (e.tables || []).length, e.tables && e.tables.length
+    ? e.tables.map(t => `<div class="grp"><b>${T(t.who)}</b><ul>${t.pts.map(x => `<li>${T(x)}</li>`).join('')}</ul></div>`).join('')
+    : '');
+
+  /* 7. 회고·피드백·후속 조치 */
+  let after = '';
   if (e.retro) {
-    h += `<div class="box"><span class="lbl">운영진 공개 회고 · ${esc(e.retro.when)}</span>`;
-    e.retro.items.forEach(i => { h += `<h5>${esc(i.h)}</h5><p>${esc(i.p)}</p>`; });
-    if (e.retro.tail) h += `<p style="color:var(--text-muted);border-top:1px solid var(--border);padding-top:.6rem;margin-top:.7rem">${esc(e.retro.tail)}</p>`;
-    h += `</div>`;
+    after += `<div class="box"><span class="lbl">운영진 공개 회고 · ${esc(e.retro.when)}</span>`;
+    e.retro.items.forEach(i => { after += `<h6>${esc(i.h)}</h6><p>${esc(i.p)}</p>`; });
+    if (e.retro.tail) after += `<p class="tail">${esc(e.retro.tail)}</p>`;
+    after += `</div>`;
   }
   if (e.feedback && e.feedback.length) {
-    h += `<div class="box"><span class="lbl">참석자 피드백</span>${e.feedback.map(f => `<p>${T(f)}</p>`).join('')}</div>`;
+    after += `<div class="box"><span class="lbl">참석자 피드백</span>${e.feedback.map(f => `<p>${T(f)}</p>`).join('')}</div>`;
   }
   if (e.actions && e.actions.length) {
-    h += `<div class="grp"><b>운영진 후속 조치</b><ul>${e.actions.map(a => `<li>${esc(a)}</li>`).join('')}</ul></div>`;
+    after += `<div class="grp"><b>운영진 후속 조치</b><ul>${e.actions.map(a => `<li>${esc(a)}</li>`).join('')}</ul></div>`;
   }
-  if (e.note) h += `<p class="note">${esc(e.note)}</p>`;
+  h += sec('행사 이후', 0, after);
+
+  /* 8. 자료 */
+  let src = '';
+  if (e.note) src += `<p class="note">${esc(e.note)}</p>`;
   if (e.links && e.links.length) {
-    h += `<div class="links">${e.links.map(l =>
+    src += `<div class="links">${e.links.map(l =>
       `<a href="${esc(l.u)}" target="_blank" rel="noopener noreferrer">${esc(l.l)} ${EXT}</a>`).join('')}</div>`;
   }
-  if (e.tags && e.tags.length) h += `<div class="tags">${e.tags.map(t => `<span>${esc(t)}</span>`).join('')}</div>`;
+  if (e.tags && e.tags.length) src += `<div class="tags">${e.tags.map(t => `<span>${esc(t)}</span>`).join('')}</div>`;
+  h += sec('자료', 0, src);
+
   return h;
 }
 
