@@ -1,0 +1,95 @@
+name: 디스코드 동기화
+
+# 디스코드 후기 채널을 주기적으로 읽어 새 회차 초안 PR 을 연다.
+#
+# 자동으로 머지하지 않는다. 이 파이프라인이 만드는 것은 diff 뿐이고, 반영 여부는 사람이 정한다.
+# 원문 대조(tools/verify-source.mjs)를 통과하지 못하면 PR 도 열리지 않는다.
+
+on:
+  schedule:
+    - cron: '0 21 * * *'          # 매일 06:00 KST
+  workflow_dispatch:
+    inputs:
+      dry:
+        description: '대조까지만 하고 PR 을 열지 않는다'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: discord-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+      DISCORD_CHANNEL_IDS: ${{ secrets.DISCORD_CHANNEL_IDS }}
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+      SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      AUTHOR_SALT: ${{ secrets.AUTHOR_SALT }}
+      SITE_URL: ${{ vars.SITE_URL }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: 적재 — 디스코드 원문을 bloom_raw 로
+        run: node bot/ingest.mjs
+
+      - name: 구조화 — 원문을 레코드 초안으로
+        run: node bot/extract.mjs
+
+      - name: 대조 — 원문에 없는 내용 차단
+        id: verify
+        run: node tools/verify-source.mjs
+
+      - name: 새 회차가 있는지 확인
+        id: has
+        run: |
+          n=$(node bot/summary.mjs count)
+          echo "count=$n" >> "$GITHUB_OUTPUT"
+          echo "새 회차 $n 건"
+
+      - name: 반영 — src/data.js 에 추가하고 다시 빌드
+        if: steps.has.outputs.count != '0' && inputs.dry != true
+        run: |
+          node bot/apply.mjs
+          node tools/verify-source.mjs --data
+          node build.mjs
+
+      - name: PR 열기
+        if: steps.has.outputs.count != '0' && inputs.dry != true
+        id: pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          branch="bot/archive-$(date -u +%Y%m%d-%H%M)"
+          git config user.name  "bloom-archive-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add src/data.js dist/index.html
+          git commit -m "아카이브: 새 회차 ${{ steps.has.outputs.count }}건 반영 (초안)"
+          git push -u origin "$branch"
+          node bot/summary.mjs body > /tmp/pr-body.md
+          url=$(gh pr create --draft --title "아카이브: 새 회차 ${{ steps.has.outputs.count }}건 (초안)" --body-file /tmp/pr-body.md)
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+          echo "$url"
+
+      - name: 알림 — 검토 요청
+        if: steps.pr.outcome == 'success' && steps.has.outputs.count != '0'
+        run: node bot/notify.mjs pr "${{ steps.pr.outputs.url }}"
+
+      - name: 알림 — 중단
+        if: failure()
+        run: node bot/notify.mjs fail "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} 에서 확인해 주세요." || true

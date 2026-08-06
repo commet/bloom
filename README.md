@@ -89,6 +89,64 @@ select created_at, kind, event_id, body, contact from public.bloom_notes
 where status = 'new' order by created_at desc;
 ```
 
+## 디스코드 봇 (자동 반영)
+
+새 회차가 열리면 디스코드 원문을 읽어 **초안 PR 을 여는 것까지** 자동으로 한다.
+자동으로 머지하지는 않는다 — 사람이 PR 을 보고 머지해야 페이지에 올라간다.
+
+```
+디스코드 채널
+  ↓ bot/ingest.mjs    원문 그대로 bloom_raw 에 적재 (편집 금지, append-only)
+  ↓ bot/extract.mjs   레코드 형식으로 분류·배치 (요약이 아니다)
+  ↓ tools/verify-source.mjs   원문 대조 — 지어낸 문장이면 여기서 멈춘다
+  ↓ bot/apply.mjs     src/data.js 에 추가 → node build.mjs
+  ↓ 초안 PR
+  ↓ 사람이 머지 → Vercel 자동 배포 → 디스코드에 반영 알림
+```
+
+**요약하지 않는다.** 요약은 해석이고, 이 페이지는 해석하지 않는다는 전제 위에 서 있다.
+봇이 하는 일은 어느 문장이 인용이고 어느 문장이 진행 방식인지 골라 제자리에 넣는 것까지다.
+
+**검사가 통과시키지 않으면 PR 도 열리지 않는다.** `tools/verify-source.mjs` 가 보는 것:
+
+| 검사 | 걸리는 것 |
+|---|---|
+| 인용 대조 | `quotes[].t` 가 원문에 문자 그대로 없으면 실패. 다듬어도 실패한다 |
+| 수치 대조 | 인원·산문 속 숫자가 원문에 없으면 실패. 추정치가 사실로 굳는 경로를 막는다 |
+| 어휘 대조 | 원문에 없던 낱말 비율이 높으면 실패 — 옮긴 것이 아니라 쓴 것이다 |
+| 평가 금지 | "시사한다", "인상적이다" 류의 진단 표현 |
+| 실명 규칙 | 연사·운영진 명단에 없는 사람 이름 |
+| 스키마 | 필드·요일·id 정합, 중복 회차 |
+
+이 검사들이 실제로 막는지는 토큰 없이도 확인할 수 있다:
+
+```bash
+npm run bot:test    # 지어낸 인용·없는 수치·평가 문장·실명을 넣어 보고 잡히는지 본다
+npm run verify      # 현재 src/data.js 가 규칙을 지키는지
+```
+
+### 필요한 것
+
+디스코드 개발자 포털에서 봇을 만들고 **Message Content Intent** 를 켠 뒤, 대상 채널에
+`View Channel` + `Read Message History` 권한으로 초대한다. 그리고 저장소 시크릿에:
+
+| 시크릿 | 용도 |
+|---|---|
+| `DISCORD_BOT_TOKEN` | 봇 토큰 |
+| `DISCORD_CHANNEL_IDS` | 읽을 채널 ID, 쉼표 구분 |
+| `SUPABASE_SERVICE_KEY` | 원문 적재용. **페이지에 들어가는 익명 키와 다른 키다** |
+| `ANTHROPIC_API_KEY` | 구조화 단계 |
+| `AUTHOR_SALT` | 작성자 ID 해시 솔트 |
+| `DISCORD_WEBHOOK_URL` | (선택) 반영 알림 |
+
+`.github/workflows/discord-sync.yml` 이 매일 06:00 KST 에 돌고, Actions 탭에서 수동 실행도 된다.
+로컬에서는 `.env.bot` 에 같은 값을 넣고 `npm run bot:dry` 로 대조까지만 돌려볼 수 있다.
+
+작성자는 **해시만** 저장한다. 표시 이름을 남기지 않으므로 뒤 단계가 참석자 실명을 흘릴 경로가 없다.
+`bot/out/` 에는 원문 사본이 떨어지므로 저장소에 올리지 않는다.
+
+**운영진 동의가 먼저다.** 커뮤니티 채널 내용을 공개 페이지로 옮기는 일이라 기술 문제가 아니다.
+
 ## 점검
 
 ```bash
@@ -96,6 +154,7 @@ node tools/check.mjs   # 대비(WCAG AA) + 달력·드로어·필터 동작, 두
 node tools/audit.mjs   # 390/768/1440px 가로 넘침
 node tools/shoot.mjs   # 라이트·다크·모바일 스크린샷 → dist/shots/
 node tools/participate.mjs  # 공감·제보 (RPC 응답을 흉내 내서 클라이언트 로직만)
+node tools/bot-selftest.mjs # 봇 파이프라인 — 막아야 할 것을 막는지
 ```
 
 대비 검사는 반투명 배경을 아래 레이어와 합성한 뒤 계산한다. 이 검사가 실제로 두 건을 잡아냈다 —

@@ -57,7 +57,9 @@ html = html.replace('/*__DATA__*/', json);
 
 mkdirSync(p('dist'), { recursive: true });
 
-const fontsDir = process.env.FONTS_DIR;
+// 기본값은 저장소에 커밋된 병합본이다. 이게 없으면 CI 가 빌드할 때마다 인라인 폰트가
+// 조용히 사라진 dist 를 만들어 낸다. FONTS_DIR 로 fontsource 원본 트리를 가리켜도 된다.
+const fontsDir = process.env.FONTS_DIR || p('assets/fonts');
 if (fontsDir && existsSync(fontsDir)) {
   // 최종 마크업에 남는 글자만 모은다 (스크립트로 생성되는 문자열 포함)
   const chars = [...new Set(html.replace(/\s+/g, ' '))].join('');

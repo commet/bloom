@@ -1,0 +1,21 @@
+name: 반영 알림
+
+# 봇이 연 초안 PR 이 머지되면 디스코드에 알린다. 머지가 곧 배포이므로(Vercel 자동 배포),
+# 커뮤니티가 "언제 올라갔는지"를 페이지 밖에서도 알 수 있어야 한다.
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  notify:
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'bot/')
+    runs-on: ubuntu-latest
+    env:
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node bot/notify.mjs live "${{ github.event.pull_request.html_url }}"

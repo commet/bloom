@@ -4,3 +4,8 @@ dist/fonts.css
 dist/.charset.txt
 dist/.fontparts/
 package-lock.json
+
+# 봇 실행 산출물 — 원문은 Supabase 에 있고 이건 그 실행분 사본일 뿐이다.
+# 원문에는 참석자 메시지가 그대로 들어 있으므로 저장소에 올리지 않는다.
+bot/out/
+.env.bot

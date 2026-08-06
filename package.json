@@ -8,7 +8,11 @@
     "build": "node build.mjs",
     "check": "node tools/check.mjs && node tools/audit.mjs",
     "shots": "node tools/shoot.mjs",
-    "og": "node tools/og.mjs"
+    "og": "node tools/og.mjs",
+    "verify": "node tools/verify-source.mjs --data",
+    "bot:test": "node tools/bot-selftest.mjs",
+    "bot:dry": "node bot/run.mjs --dry",
+    "bot": "node bot/run.mjs"
   },
   "devDependencies": {
     "playwright": "^1.57.0"

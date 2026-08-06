@@ -8,6 +8,12 @@
   조각마다 교집합만 남긴 뒤 하나로 병합한다. 조각당 폰트 테이블 오버헤드가 사라져
   용량이 1/2.5로 줄어든다.
 
+원본 폰트는 두 가지 배치를 모두 받는다.
+
+  1. assets/fonts/ — 저장소에 커밋된 병합본 (기본값). CI 가 폰트 없이 빌드해
+     dist 의 인라인 폰트를 날려 먹는 사고를 막으려고 넣어 뒀다. 880KB.
+  2. fontsource woff2 트리 — 원본을 새로 받았을 때. gothic 은 100조각짜리 그대로 둬도 된다.
+
 사용: python3 tools/subset_fonts.py <charset.txt> <fonts-dir> <out.css>
 """
 import base64
@@ -20,8 +26,16 @@ from fontTools import subset
 from fontTools.merge import Merger
 from fontTools.ttLib import TTFont
 
-ARCHIVO = ("Archivo", "archivo/archivo-latin-standard-normal.woff2")  # wght 100–900 + wdth 62–125
+ARCHIVO = ("Archivo", ["archivo-variable.woff2", "archivo/archivo-latin-standard-normal.woff2"])
 GOTHIC = [("Gothic A1", 600), ("Gothic A1", 800)]
+
+
+def gothic_sources(fonts_dir: Path, weight: int) -> list[Path]:
+    """병합본이 있으면 그것 하나, 없으면 fontsource 조각들."""
+    one = fonts_dir / f"gothic-a1-{weight}.woff2"
+    if one.exists():
+        return [one]
+    return [p for i in range(200) if (p := fonts_dir / "gothic" / f"gothic-a1-{i}-{weight}-normal.woff2").exists()]
 
 # 라틴 파트는 항상 포함 (UI 라벨, 숫자, 구두점이 조건부로 생성될 수 있으므로)
 ALWAYS = set(
@@ -99,8 +113,9 @@ def main():
 
     css, total = [], 0
 
-    family, rel = ARCHIVO
-    data = cut(fonts_dir / rel, chars)
+    family, rels = ARCHIVO
+    src = next((fonts_dir / r for r in rels if (fonts_dir / r).exists()), None)
+    data = cut(src, chars) if src else None
     if data:
         # 가변 폰트는 축 범위를 그대로 선언한다
         b64 = base64.b64encode(data).decode()
@@ -116,12 +131,15 @@ def main():
     for family, w in GOTHIC:
         shutil.rmtree(tmp, ignore_errors=True)
         tmp.mkdir(parents=True, exist_ok=True)
-        paths = [p for i in range(200) if (p := fonts_dir / "gothic" / f"gothic-a1-{i}-{w}-normal.woff2").exists()]
+        paths = gothic_sources(fonts_dir, w)
+        if not paths:
+            continue
         data = cut_and_merge(paths, chars, tmp)
         if data:
             css.append(face(family, w, data))
             total += len(data)
-            print(f"  Gothic A1 {w}: {len(paths)} subsets 병합, {len(data) / 1024:.1f} KB")
+            note = "병합본" if len(paths) == 1 else f"{len(paths)} subsets 병합"
+            print(f"  Gothic A1 {w}: {note}, {len(data) / 1024:.1f} KB")
     shutil.rmtree(tmp, ignore_errors=True)
 
     out_css.parent.mkdir(parents=True, exist_ok=True)
