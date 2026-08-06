@@ -1,0 +1,911 @@
+<!--
+THESIS: Bloom has no room of its own — 25 nights in 18+ borrowed floors. This page is the
+lobby directory board for those borrowed rooms, not the conference-recap microsite (hero
+metric + gradient timeline rail) the category always ships.
+OWN-WORLD: Seoul office-lobby signage. Ink-graphite plate, enamel-ivory lettering, brass
+floor numerals, hairline rules, left-aligned rows. Every component is a plate or a row.
+STORY: A visitor scans four months as one directory, presses the row they care about, and
+reads what was actually said inside that room — sourced, never invented.
+FIRST VIEWPORT: Plate header (BLOOM / 안내 DIRECTORY / date span) sitting directly on the
+three-column directory; today's row struck in brass. Filters ride the rail above the list.
+FORM: Building directory board — candidate 7 of 7 on the grounded list. Seed key ca65f7be.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review,
+the verdict, and DESIGN.md.
+-->
+<title>Bloom 아카이브 · 2026.04 — 08</title>
+<meta name="description" content="Bloom 커뮤니티가 2026년 4월부터 8월까지 빌린 방들의 기록. 25회 이상의 행사, 조별 토론, 공개 회고를 원문 그대로 모았다.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<style>/*__FONTS__*/</style>
+
+<style>
+/* ─────────────────────────── plate ─────────────────────────── */
+:root {
+  color-scheme: dark light;
+  --plate:   #14161a;
+  --plate-2: #1b1e24;
+  --plate-3: #21252c;
+  --rule:    #2b3038;
+  --rule-2:  #3a4049;
+  --ink:     #ece7dc;
+  --ink-2:   #a4a196;
+  --ink-3:   #85837a;
+  --brass:   #c8912f;
+  --brass-d: #e0b25c;
+  --signal:  #3f9d6d;
+  --sel:     #3a3320;
+  --today:   color-mix(in srgb, #c8912f 7%, transparent);
+
+  --sans: "Overpass", ui-sans-serif, system-ui, sans-serif;
+  --ko: "Gothic A1", "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  --body: ui-sans-serif, -apple-system, "Apple SD Gothic Neo", "Pretendard",
+          "Segoe UI", "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
+
+  --pad: clamp(1.1rem, 4vw, 3.5rem);
+  --max: 78rem;
+  --ease: cubic-bezier(.16, 1, .3, 1);
+}
+
+:root[data-theme="light"], html:not([data-theme="dark"]) {}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --plate:   #eae6dc;
+    --plate-2: #f3f0e8;
+    --plate-3: #ffffff;
+    --rule:    #cdc6b6;
+    --rule-2:  #b3aa96;
+    --ink:     #16181c;
+    --ink-2:   #5e5a50;
+    --ink-3:   #6b6559;
+    --brass:   #7f5710;
+    --brass-d: #61430b;
+    --signal:  #216e46;
+    --sel:     #e4d6ac;
+    --today:   color-mix(in srgb, #7f5710 4%, transparent);
+  }
+}
+:root[data-theme="light"] {
+  --plate:   #eae6dc;
+  --plate-2: #f3f0e8;
+  --plate-3: #ffffff;
+  --rule:    #cdc6b6;
+  --rule-2:  #b3aa96;
+  --ink:     #16181c;
+  --ink-2:   #5e5a50;
+  --ink-3:   #6b6559;
+  --brass:   #7f5710;
+  --brass-d: #61430b;
+  --signal:  #216e46;
+  --sel:     #e4d6ac;
+  --today:   color-mix(in srgb, #7f5710 4%, transparent);
+}
+:root[data-theme="dark"] {
+  --plate:   #14161a; --plate-2: #1b1e24; --plate-3: #21252c;
+  --rule:    #2b3038; --rule-2: #3a4049;
+  --ink:     #ece7dc; --ink-2: #a4a196; --ink-3: #85837a;
+  --brass:   #c8912f; --brass-d: #e0b25c; --signal: #3f9d6d; --sel: #3a3320;
+  --today:   color-mix(in srgb, #c8912f 7%, transparent);
+}
+
+* { box-sizing: border-box; min-width: 0; }
+
+html {
+  background: var(--plate);
+  scrollbar-color: var(--rule-2) var(--plate);
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--plate);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: clamp(.95rem, .92rem + .18vw, 1.02rem);
+  line-height: 1.72;
+  letter-spacing: -.005em;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* browser surfaces */
+::selection { background: var(--sel); color: var(--ink); }
+:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-track { background: var(--plate); }
+::-webkit-scrollbar-thumb { background: var(--rule-2); border: 3px solid var(--plate); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ink-3); }
+input { caret-color: var(--brass); }
+
+a { color: inherit; text-decoration-color: var(--rule-2); text-underline-offset: .22em; text-decoration-thickness: 1px; }
+a:hover { text-decoration-color: var(--brass); }
+
+.wrap { max-width: var(--max); margin-inline: auto; padding-inline: var(--pad); }
+
+/* signage typographic roles */
+.stencil {
+  font-family: var(--sans);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.02em;
+  font-feature-settings: "ss01";
+}
+.label {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: .68rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+h1, h2, h3, h4 { font-family: var(--ko); font-weight: 800; letter-spacing: -.03em; line-height: 1.24; margin: 0; text-wrap: balance; }
+
+/* ───────────────────────── nav rail ───────────────────────── */
+.rail {
+  position: sticky; top: 0; z-index: 40;
+  background: color-mix(in srgb, var(--plate) 88%, transparent);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--rule);
+}
+.rail-in {
+  max-width: var(--max); margin-inline: auto; padding: 0 var(--pad);
+  display: flex; align-items: center; gap: .35rem; height: 46px;
+  overflow-x: auto; scrollbar-width: none;
+}
+.rail-in::-webkit-scrollbar { display: none; }
+.rail a, .rail button {
+  flex: none; font: inherit; font-family: var(--sans); font-weight: 600; font-size: .78rem;
+  letter-spacing: .02em; color: var(--ink-2); background: none; border: 0;
+  padding: .35rem .55rem; cursor: pointer; text-decoration: none; border-radius: 2px;
+}
+.rail a:hover, .rail button:hover { color: var(--ink); }
+.rail .mark { flex: none; white-space: nowrap; color: var(--ink); font-family: var(--sans); font-weight: 800; letter-spacing: -.01em; margin-right: .4rem; font-size: .86rem; }
+.rail a, .rail button { white-space: nowrap; }
+.rail .sp { margin-left: auto; }
+
+/* ───────────────────────── masthead ───────────────────────── */
+.mast { padding: clamp(2.2rem, 6vw, 4.4rem) 0 0; }
+.mast-top {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 1rem; flex-wrap: wrap;
+  border-bottom: 2px solid var(--ink); padding-bottom: .5rem;
+}
+.mast h1 {
+  font-family: var(--sans); font-weight: 800;
+  font-size: clamp(2.7rem, 11vw, 6rem);
+  letter-spacing: -.045em; line-height: .88; margin: 0;
+}
+.mast .sub { font-family: var(--sans); font-weight: 700; font-size: clamp(.7rem, 2.2vw, .82rem); letter-spacing: .2em; color: var(--ink-2); text-transform: uppercase; }
+.mast .span {
+  font-family: var(--sans); font-weight: 600; font-variant-numeric: tabular-nums;
+  font-size: clamp(.78rem, 2.4vw, .95rem); color: var(--ink-2); letter-spacing: .01em;
+}
+
+.lede {
+  max-width: 34em; margin: 1.5rem 0 0;
+  font-size: clamp(1.02rem, 1rem + .35vw, 1.24rem); line-height: 1.66; color: var(--ink);
+}
+.lede em { font-style: normal; color: var(--brass); font-weight: 600; }
+.lede + p { max-width: 34em; margin: .8rem 0 0; color: var(--ink-2); font-size: .93rem; }
+
+/* status strip — the board's tenant count, not a metric hero */
+.strip {
+  margin-top: clamp(1.8rem, 5vw, 2.8rem);
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+}
+.strip div { padding: .8rem 0 .85rem; border-left: 1px solid var(--rule); padding-left: .9rem; }
+.strip div:first-child { border-left: 0; padding-left: 0; }
+.strip b { display: block; font-family: var(--sans); font-weight: 800; font-variant-numeric: tabular-nums; font-size: clamp(1.3rem, 4vw, 1.7rem); letter-spacing: -.03em; line-height: 1.1; }
+.strip b i { font-style: normal; font-size: .58em; font-weight: 700; color: var(--ink-2); margin-left: .15em; letter-spacing: 0; }
+.strip span { display: block; font-size: .74rem; color: var(--ink-3); letter-spacing: .04em; margin-top: .15rem; }
+.strip-note { margin: .55rem 0 0; font-size: .74rem; color: var(--ink-3); }
+
+/* ───────────────────────── sections ───────────────────────── */
+section { padding-top: clamp(3.2rem, 9vw, 6rem); scroll-margin-top: 54px; }
+.head { display: flex; align-items: baseline; gap: .8rem; border-bottom: 1px solid var(--rule); padding-bottom: .55rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+.head h2 { font-size: clamp(1.35rem, 1.15rem + 1.1vw, 2.05rem); }
+.head .n { font-family: var(--sans); font-weight: 700; font-size: .7rem; letter-spacing: .18em; color: var(--ink-3); text-transform: uppercase; margin-left: auto; }
+.intro { max-width: 40em; color: var(--ink-2); margin: 0 0 1.8rem; }
+
+/* ───────────────────────── filters ───────────────────────── */
+.filters { display: flex; flex-wrap: wrap; gap: .9rem 1.4rem; align-items: flex-end; margin-bottom: 1.1rem; }
+.fgroup { display: flex; flex-direction: column; gap: .4rem; }
+.fgroup > .label { font-size: .62rem; }
+.chips { display: flex; flex-wrap: wrap; gap: .3rem; }
+.chip {
+  font: inherit; font-family: var(--sans); font-weight: 600; font-size: .78rem;
+  padding: .26rem .6rem; background: transparent; color: var(--ink-2);
+  border: 1px solid var(--rule); cursor: pointer; border-radius: 2px;
+  transition: color .15s, border-color .15s, background-color .15s;
+  font-variant-numeric: tabular-nums;
+}
+.chip:hover { color: var(--ink); border-color: var(--rule-2); }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--plate); border-color: var(--ink); }
+
+.search { position: relative; flex: 1 1 13rem; min-width: 11rem; }
+.search input {
+  width: 100%; font: inherit; font-size: .88rem; color: var(--ink);
+  background: var(--plate-2); border: 1px solid var(--rule); border-radius: 2px;
+  padding: .42rem .6rem .42rem 1.9rem;
+}
+.search input::placeholder { color: var(--ink-3); }
+.search svg { position: absolute; left: .55rem; top: 50%; translate: 0 -50%; width: 15px; height: 15px; stroke: var(--ink-3); fill: none; stroke-width: 1.6; }
+
+.fbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; padding: .45rem 0 .7rem; border-bottom: 1px solid var(--rule); }
+.count { font-family: var(--sans); font-weight: 600; font-size: .78rem; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.count b { color: var(--ink); font-weight: 800; }
+.linkbtn { font: inherit; font-family: var(--sans); font-weight: 600; font-size: .78rem; background: none; border: 0; color: var(--ink-2); cursor: pointer; padding: .2rem .1rem; text-decoration: underline; text-decoration-color: var(--rule-2); text-underline-offset: .25em; }
+.linkbtn:hover { color: var(--brass); }
+
+/* ───────────────────────── directory ───────────────────────── */
+.dir { border-top: 1px solid var(--rule); }
+.row { border-bottom: 1px solid var(--rule); }
+.row[hidden] { display: none; }
+
+.rowbtn {
+  display: grid; width: 100%; text-align: left; gap: .1rem 1rem;
+  grid-template-columns: 6.2rem 1fr auto;
+  align-items: baseline;
+  padding: .82rem .2rem .86rem 0;
+  background: none; border: 0; color: inherit; font: inherit; cursor: pointer;
+  transition: background-color .18s var(--ease);
+}
+.rowbtn:hover { background: var(--plate-2); }
+.rowbtn:hover .rt { color: var(--brass); }
+
+.rd { font-family: var(--sans); font-weight: 800; font-variant-numeric: tabular-nums; font-size: 1.02rem; letter-spacing: -.02em; color: var(--ink); white-space: nowrap; }
+.rd i { font-style: normal; font-weight: 600; font-size: .74em; color: var(--ink-3); margin-left: .3em; }
+.rmid { display: flex; flex-direction: column; gap: .12rem; }
+.rt { font-family: var(--ko); font-weight: 800; font-size: clamp(1rem, .96rem + .3vw, 1.14rem); letter-spacing: -.03em; line-height: 1.3; transition: color .18s; }
+.rv { font-size: .8rem; color: var(--ink-3); display: flex; gap: .5rem; align-items: baseline; flex-wrap: wrap; }
+.rv .floor {
+  font-family: var(--sans); font-weight: 800; font-size: .68rem; letter-spacing: .04em;
+  color: var(--brass); border: 1px solid color-mix(in srgb, var(--brass) 45%, transparent);
+  padding: 0 .3rem; border-radius: 2px; line-height: 1.5;
+}
+.rright { display: flex; align-items: center; gap: .7rem; }
+.rn { font-family: var(--sans); font-weight: 700; font-variant-numeric: tabular-nums; font-size: .82rem; color: var(--ink-2); white-space: nowrap; }
+.rn em { font-style: normal; color: var(--ink-3); font-weight: 600; }
+.caret { width: 11px; height: 11px; flex: none; stroke: var(--ink-3); fill: none; stroke-width: 2; transition: rotate .3s var(--ease), stroke .18s; }
+.rowbtn[aria-expanded="true"] .caret { rotate: 90deg; stroke: var(--brass); }
+.rowbtn[aria-expanded="true"] .rt { color: var(--brass); }
+
+.row.today .rd { color: var(--brass); }
+.row.today { background: var(--today); }
+.tagnow {
+  font-family: var(--sans); font-weight: 800; font-size: .6rem; letter-spacing: .14em;
+  background: var(--brass); color: var(--plate); padding: .05rem .3rem; border-radius: 2px; text-transform: uppercase;
+}
+.tagsoon {
+  font-family: var(--sans); font-weight: 800; font-size: .6rem; letter-spacing: .14em;
+  color: var(--signal); border: 1px solid color-mix(in srgb, var(--signal) 50%, transparent);
+  padding: .02rem .3rem; border-radius: 2px; text-transform: uppercase;
+}
+
+/* the authored moment: the plate opens */
+.panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .42s var(--ease); }
+.row.open .panel { grid-template-rows: 1fr; }
+.panel > div { overflow: hidden; }
+.pbody { padding: .2rem 0 2rem; display: grid; gap: 0 clamp(1.5rem, 3vw, 3.4rem); align-items: start; }
+.pmain { max-width: 66ch; }
+@media (max-width: 61.99rem) { .pside { margin-top: 1.6rem; padding-top: 1.4rem; border-top: 1px solid var(--rule); } }
+@media (min-width: 62rem) {
+  /* 본문과 규격판을 가르는 괘선 — 안내판의 분리선 */
+  .pbody { grid-template-columns: minmax(0, 66ch) minmax(14rem, 21rem); gap: 0; }
+  .pmain { max-width: none; border-right: 1px solid var(--rule); padding-right: clamp(1.5rem, 3vw, 3.2rem); }
+  .pside { padding-left: clamp(1.5rem, 3vw, 3.2rem); }
+  .pbody .meta { margin-top: 0; }
+}
+.row.open .pbody > * { animation: rise .5s var(--ease) both; }
+@keyframes rise { from { opacity: 0; translate: 0 10px; } to { opacity: 1; translate: 0 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .panel { transition: none; }
+  .row.open .pbody > * { animation: none; }
+  .caret { transition: none; }
+}
+
+/* panel content */
+.meta { font-size: .86rem; margin: .3rem 0 1.3rem; padding-bottom: 1.1rem; border-bottom: 1px solid var(--rule); }
+.meta dt { color: var(--ink-3); font-family: var(--sans); font-weight: 700; font-size: .66rem; letter-spacing: .12em; text-transform: uppercase; margin-top: .8rem; }
+.meta dt:first-child { margin-top: 0; }
+.meta dd { margin: .05rem 0 0; color: var(--ink-2); line-height: 1.55; }
+.meta dd b { color: var(--ink); font-weight: 600; }
+
+.pbody h4 { font-size: .95rem; margin: 1.5rem 0 .35rem; letter-spacing: -.02em; }
+.pbody p { margin: 0 0 .7rem; }
+.pmain > h4:first-child { margin-top: .2rem; }
+.pbody .dim { color: var(--ink-2); }
+
+.q {
+  margin: 1.5rem 0; padding: 0 0 0 1.05rem;
+  border-left: 1px solid var(--rule-2);
+}
+.q.pin { border-left-color: var(--brass); }
+.q p { font-family: var(--ko); font-weight: 500; font-size: 1.06rem; line-height: 1.6; letter-spacing: -.02em; margin: 0 0 .35rem; color: var(--ink); }
+.q.pin p { font-weight: 800; font-size: 1.14rem; }
+.q cite { font-style: normal; font-size: .78rem; color: var(--ink-3); font-family: var(--sans); font-weight: 600; }
+
+.tbl { width: 100%; border-collapse: collapse; font-size: .84rem; margin: .5rem 0 1rem; }
+.tbl th { text-align: left; font-family: var(--sans); font-weight: 700; font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); border-bottom: 1px solid var(--rule-2); padding: .3rem .7rem .3rem 0; }
+.tbl td { border-bottom: 1px solid var(--rule); padding: .5rem .7rem .5rem 0; color: var(--ink-2); vertical-align: top; }
+.tbl td:first-child { color: var(--ink); font-weight: 600; white-space: nowrap; }
+.tblwrap { overflow-x: auto; }
+
+.tblock { margin: .9rem 0; }
+.tblock > b { display: block; font-family: var(--sans); font-weight: 700; font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--brass); margin-bottom: .3rem; }
+.tblock ul { margin: 0; padding-left: 1.05rem; }
+.tblock li { margin-bottom: .32rem; color: var(--ink-2); }
+.tblock li::marker { color: var(--rule-2); }
+
+.plate {
+  background: var(--plate-2); border: 1px solid var(--rule);
+  padding: 1rem 1.15rem; margin: 1.3rem 0; border-radius: 2px;
+}
+.plate.retro { border-color: color-mix(in srgb, var(--brass) 40%, var(--rule)); }
+.plate > .label { display: block; margin-bottom: .5rem; }
+.plate h5 { font-family: var(--sans); font-weight: 800; font-size: .82rem; letter-spacing: .01em; margin: .9rem 0 .25rem; color: var(--ink); }
+.plate h5:first-of-type { margin-top: 0; }
+.plate p { font-size: .89rem; color: var(--ink-2); margin: 0 0 .5rem; }
+.plate p:last-child { margin-bottom: 0; }
+
+.chipline { display: flex; flex-wrap: wrap; gap: .3rem; margin: 1rem 0 0; }
+.tag { font-family: var(--sans); font-weight: 600; font-size: .7rem; color: var(--ink-3); border: 1px solid var(--rule); padding: .1rem .42rem; border-radius: 2px; }
+.tag.first { color: var(--signal); border-color: color-mix(in srgb, var(--signal) 40%, transparent); }
+.taglist { margin-top: 1.6rem; padding-top: 1rem; border-top: 1px solid var(--rule); align-items: center; }
+.taglist::before { content: '같은 주제'; font-family: var(--sans); font-weight: 700; font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); margin-right: .3rem; }
+button.tag { font: inherit; font-family: var(--sans); font-weight: 600; font-size: .7rem; background: none; cursor: pointer; }
+button.tag:hover { color: var(--brass); border-color: var(--brass); }
+
+.links { display: flex; flex-wrap: wrap; gap: .35rem .9rem; margin: 1.2rem 0 0; padding-top: .9rem; border-top: 1px solid var(--rule); }
+.links a { font-family: var(--sans); font-weight: 600; font-size: .8rem; color: var(--ink-2); display: inline-flex; align-items: center; gap: .3rem; }
+.links a:hover { color: var(--brass); }
+.links svg { width: 10px; height: 10px; stroke: currentColor; fill: none; stroke-width: 2; flex: none; }
+
+.note {
+  font-size: .8rem; color: var(--ink-3); margin: .9rem 0 0; padding-left: .8rem;
+  border-left: 1px solid var(--rule-2);
+}
+
+.speakers { margin: 0 0 1.2rem; padding: 0; list-style: none; }
+.speakers li { padding: .45rem 0; border-bottom: 1px solid var(--rule); }
+.speakers li:last-child { border-bottom: 0; }
+.speakers b { font-family: var(--ko); font-weight: 800; letter-spacing: -.02em; }
+.speakers span { color: var(--ink-2); font-size: .86rem; }
+.speakers em { display: block; font-style: normal; color: var(--ink-3); font-size: .8rem; margin-top: .15rem; }
+
+.empty { padding: 3rem 0; text-align: center; color: var(--ink-3); }
+
+/* ───────────────────── generic sections ───────────────────── */
+.stack { display: grid; gap: 1px; background: var(--rule); border-block: 1px solid var(--rule); }
+.stack > article { background: var(--plate); padding: 1.4rem 0; display: grid; gap: .4rem clamp(1.5rem, 3vw, 3.4rem); align-items: start; }
+@media (min-width: 62rem) { .stack > article { grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); } }
+.stack > article > h3 { font-size: 1.08rem; }
+.stack p { color: var(--ink-2); margin: 0 0 .6rem; max-width: 62ch; }
+.stack ul { margin: 0; padding-left: 1.05rem; max-width: 62ch; }
+.stack li { color: var(--ink-2); margin-bottom: .3rem; }
+.stack li::marker { color: var(--rule-2); }
+
+.retros { display: grid; gap: 1.2rem; }
+@media (min-width: 62rem) { .retros { grid-template-columns: repeat(auto-fit, minmax(26rem, 1fr)); align-items: start; } }
+.retros > article { border: 1px solid var(--rule); border-left: 1px solid color-mix(in srgb, var(--brass) 55%, var(--rule)); padding: 1.3rem clamp(1rem, 3vw, 1.7rem); border-radius: 2px; background: var(--plate-2); }
+.retros h3 { font-size: 1.02rem; }
+.retros .when { font-family: var(--sans); font-weight: 600; font-size: .74rem; color: var(--ink-2); font-variant-numeric: tabular-nums; margin: .15rem 0 1rem; display: block; }
+.retros h5 { font-family: var(--sans); font-weight: 800; font-size: .8rem; letter-spacing: .02em; margin: 1rem 0 .25rem; color: var(--brass); }
+.retros p { font-size: .9rem; color: var(--ink-2); margin: 0 0 .5rem; max-width: 62ch; }
+.retros .tail { margin-top: 1rem; padding-top: .9rem; border-top: 1px solid var(--rule); font-size: .84rem; color: var(--ink-2); }
+
+.next { display: grid; gap: 1.4rem clamp(1.5rem, 3vw, 3.4rem); }
+@media (min-width: 62rem) { .next { grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr)); align-items: start; } }
+.next > article { border-top: 2px solid var(--ink); padding-top: .9rem; }
+.next .d { font-family: var(--sans); font-weight: 800; font-variant-numeric: tabular-nums; font-size: .84rem; color: var(--brass); letter-spacing: .02em; }
+.next h3 { font-size: clamp(1.15rem, 1rem + .7vw, 1.5rem); margin: .2rem 0 .3rem; }
+.next .vn { font-size: .82rem; color: var(--ink-3); margin: 0 0 .8rem; }
+.next p { color: var(--ink-2); max-width: 60ch; margin: 0 0 .7rem; }
+.next .ok { font-size: .78rem; color: var(--signal); display: flex; gap: .45rem; align-items: flex-start; margin-top: .6rem; }
+.ck { width: 12px; height: 12px; flex: none; margin-top: .38em; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+.vlist { display: grid; gap: 0; border-top: 1px solid var(--rule); }
+.vlist > div { display: grid; grid-template-columns: 1fr; gap: .1rem .9rem; padding: .7rem 0; border-bottom: 1px solid var(--rule); }
+@media (min-width: 44rem) { .vlist > div { grid-template-columns: minmax(12rem, 20rem) 1fr; } }
+.vlist b { font-weight: 600; font-size: .88rem; }
+.vlist span { font-size: .84rem; color: var(--ink-2); }
+.vlist .warn b, .vlist .warn span { color: var(--brass); }
+
+.foot { margin-top: clamp(3.5rem, 9vw, 6rem); border-top: 1px solid var(--rule); padding: 1.6rem 0 3.5rem; }
+.foot .links { border-top: 0; padding-top: 0; margin-top: 0; }
+.foot p { font-size: .78rem; color: var(--ink-3); margin: 1rem 0 0; max-width: 50em; }
+
+@media (max-width: 40rem) {
+  .rowbtn { grid-template-columns: 1fr auto; gap: .25rem .7rem; }
+  .rd { grid-column: 1; }
+  .rmid { grid-column: 1 / -1; order: 3; }
+  .rright { grid-column: 2; grid-row: 1; }
+  .meta { grid-template-columns: 1fr; gap: .05rem; }
+  .meta dt { padding-top: .7em; }
+}
+</style>
+
+<nav class="rail" aria-label="섹션">
+  <div class="rail-in">
+    <span class="mark">BLOOM</span>
+    <a href="#directory">안내판</a>
+    <a href="#retro">회고</a>
+    <a href="#themes">되풀이된 말</a>
+    <a href="#ops">운영 기록</a>
+    <a href="#next">다음</a>
+    <a href="#record">기록 기준</a>
+    <span class="sp"></span>
+    <button type="button" id="theme" aria-label="화면 밝기 전환">밝기</button>
+  </div>
+</nav>
+
+<header class="mast wrap">
+  <div class="mast-top">
+    <h1>BLOOM</h1>
+    <span class="span" id="span"></span>
+  </div>
+  <p class="sub" style="margin:.5rem 0 0">안내 · Directory of borrowed rooms</p>
+
+  <p class="lede">
+    Bloom은 자기 공간이 없다. 넉 달 동안 <em>25번</em>, 매번 남의 사무실과 강당과 옥상과 한강공원을 빌려 저녁 7시에 모였다.
+    이 페이지는 그 빌린 방들의 안내판이다.
+  </p>
+  <p>
+    아래 목록에서 방 하나를 누르면 그날 실제로 오간 말이 나온다. 연사 발언, 조별 정리, 운영진이 스스로 올린 실패 회고까지
+    원본 기록에 있는 것만 옮겼다.
+  </p>
+
+  <div class="strip" id="strip"></div>
+  <p class="strip-note">2026년 8월 4일 운영진 발표 기준. 디스코드 멤버는 6/10 1,900명 → 6/20 2,200명 → 8/4 2,800명으로 늘었다.</p>
+</header>
+
+<main class="wrap">
+
+  <section id="directory">
+    <div class="head">
+      <h2>안내판</h2>
+      <span class="n">Directory</span>
+    </div>
+
+    <div class="filters">
+      <div class="search">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="9" cy="9" r="6"/><path d="M13.5 13.5 18 18"/></svg>
+        <input type="search" id="q" placeholder="장소·연사·주제 검색" aria-label="행사 검색" autocomplete="off">
+      </div>
+      <div class="fgroup">
+        <span class="label" id="l-month">시기</span>
+        <div class="chips" id="f-month" role="group" aria-labelledby="l-month"></div>
+      </div>
+      <div class="fgroup">
+        <span class="label" id="l-kind">형식</span>
+        <div class="chips" id="f-kind" role="group" aria-labelledby="l-kind"></div>
+      </div>
+      <div class="fgroup">
+        <span class="label" id="l-flag">표시</span>
+        <div class="chips" id="f-flag" role="group" aria-labelledby="l-flag"></div>
+      </div>
+    </div>
+
+    <div class="fbar">
+      <span class="count" id="count"></span>
+      <span>
+        <button class="linkbtn" type="button" id="expand">전부 펼치기</button>
+        <button class="linkbtn" type="button" id="reset" style="margin-left:.7rem">필터 초기화</button>
+      </span>
+    </div>
+
+    <div class="dir" id="dir"></div>
+    <p class="empty" id="empty" hidden>조건에 맞는 회차가 없다.</p>
+  </section>
+
+  <section id="retro">
+    <div class="head">
+      <h2>운영진이 스스로 올린 회고</h2>
+      <span class="n">3건</span>
+    </div>
+    <p class="intro">
+      행사가 잘 안 된 날, 운영진은 그날 밤이나 다음 날 디스코드에 무엇이 잘못됐는지 직접 적어 올렸다.
+      기록에 남은 것은 세 건이고, 두 건은 아래 전문이 있다. 나머지 한 건은 6/9 회차의 시간 배분에 관한 것으로 같은 글에 포함돼 있다.
+    </p>
+    <div class="retros" id="retros"></div>
+  </section>
+
+  <section id="themes">
+    <div class="head">
+      <h2>25번을 관통한 다섯 가지</h2>
+      <span class="n">Recurring</span>
+    </div>
+    <p class="intro">조장들이 남긴 정리에서 반복해서 나온 것들. 표현만 바뀌고 내용은 같다.</p>
+    <div class="stack" id="themes-list"></div>
+  </section>
+
+  <section id="ops">
+    <div class="head">
+      <h2>운영 기록</h2>
+      <span class="n">Operations</span>
+    </div>
+    <p class="intro">되풀이된 문제와 대응. 이 목록 자체가 Bloom의 운영 방식이다.</p>
+    <div class="tblwrap">
+      <table class="tbl" id="issues">
+        <thead><tr><th>시점</th><th>이슈</th><th>대응</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="note" id="approval"></p>
+
+    <h3 style="margin:2.6rem 0 .5rem;font-size:1.08rem">이름은 두 번 바뀌었다</h3>
+    <div class="tblwrap">
+      <table class="tbl" id="rebrand">
+        <thead><tr><th>시기</th><th>명칭</th><th>내용</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <h3 style="margin:2.6rem 0 .5rem;font-size:1.08rem">돈 이야기</h3>
+    <p class="intro" style="margin-bottom:1rem" id="opnote"></p>
+    <div class="stack" id="biz"></div>
+
+    <h3 style="margin:2.6rem 0 .5rem;font-size:1.08rem">기여 구조 논의</h3>
+    <p class="intro" style="margin-bottom:1rem" id="contrib-intro"></p>
+    <div class="stack" id="contrib"></div>
+  </section>
+
+  <section id="next">
+    <div class="head">
+      <h2>다음</h2>
+      <span class="n">Upcoming</span>
+    </div>
+    <div class="next" id="next-list"></div>
+  </section>
+
+  <section id="record">
+    <div class="head">
+      <h2>이 페이지의 기록 기준</h2>
+      <span class="n">Method</span>
+    </div>
+    <div class="stack" style="margin-bottom:2rem">
+      <article>
+        <h3>무엇을 담고 무엇을 뺐나</h3>
+        <ul id="policy"></ul>
+      </article>
+    </div>
+    <h3 style="margin:0 0 .6rem;font-size:1.02rem">따로 확인한 것</h3>
+    <div class="vlist" id="checked"></div>
+    <h3 style="margin:2.2rem 0 .6rem;font-size:1.02rem">확인하지 못한 것</h3>
+    <ul id="unresolved" style="margin:0;padding-left:1.05rem;color:var(--ink-2);max-width:58ch"></ul>
+  </section>
+
+  <footer class="foot">
+    <div class="links" id="channels"></div>
+    <p id="footnote"></p>
+  </footer>
+</main>
+
+<script>
+document.documentElement.lang = 'ko';
+
+const D = /*__DATA__*/;
+
+/* ── helpers ─────────────────────────────────────────────── */
+const $ = (s, r = document) => r.querySelector(s);
+const el = (t, c, h) => { const n = document.createElement(t); if (c) n.className = c; if (h != null) n.innerHTML = h; return n; };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const ARROW = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.5 8 6l-5 4.5"/></svg>';
+const EXT = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2h6v6M10 2 3 9"/></svg>';
+const CHECK = '<svg class="ck" viewBox="0 0 12 12" aria-hidden="true"><path d="M1.5 6.3 4.4 9.2 10.5 3"/></svg>';
+
+const KIND = { talk: '강연', roundtable: '라운드테이블', party: '파티', walk: '워크', network: '네트워킹', private: '비공개' };
+const LANG = { ko: '한국어', en: '영어', mixed: '한/영' };
+const MONTHNAME = { '04': '4월', '05': '5월', '06': '6월', '07': '7월', '08': '8월' };
+
+const fmtDate = e => { const [, m, d] = e.date.split('-'); return `${m}.${d}`; };
+
+/* ── masthead ────────────────────────────────────────────── */
+$('#span').textContent = D.meta.range;
+
+const strip = $('#strip');
+D.numbers.forEach(n => {
+  strip.append(el('div', '', `<b>${esc(n.v)}<i>${esc(n.unit)}</i></b><span>${esc(n.k)}</span>`));
+});
+
+/* ── directory ───────────────────────────────────────────── */
+const state = { month: null, kind: null, flag: null, q: '' };
+
+const FLAGS = [
+  { id: 'retro', t: '공개 회고', test: e => !!e.retro },
+  { id: 'first', t: '처음 있었던 일', test: e => e.firsts && e.firsts.length },
+  { id: 'en', t: '영어', test: e => e.lang === 'en' },
+  { id: 'paid', t: '유료', test: e => e.paid },
+  { id: 'tables', t: '조별 기록', test: e => e.tables && e.tables.length },
+];
+
+function haystack(e) {
+  return JSON.stringify([e.title, e.short, e.venue, e.format, e.summary, e.body, e.quotes, e.tables, e.speakers, e.tags, e.firsts]).toLowerCase();
+}
+const HAY = new Map(D.events.map(e => [e.id, haystack(e)]));
+
+function chipset(mount, items, key) {
+  const box = $(mount);
+  box.innerHTML = '';
+  items.forEach(it => {
+    const b = el('button', 'chip', esc(it.t));
+    b.type = 'button';
+    b.setAttribute('aria-pressed', 'false');
+    b.dataset.v = it.v;
+    b.addEventListener('click', () => {
+      state[key] = state[key] === it.v ? null : it.v;
+      [...box.children].forEach(c => c.setAttribute('aria-pressed', String(c.dataset.v === state[key])));
+      apply();
+    });
+    box.append(b);
+  });
+}
+
+chipset('#f-month', [...new Set(D.events.map(e => e.month))].sort().map(m => ({ v: m, t: MONTHNAME[m] })), 'month');
+chipset('#f-kind', Object.entries(KIND).map(([v, t]) => ({ v, t })), 'kind');
+chipset('#f-flag', FLAGS.map(f => ({ v: f.id, t: f.t })), 'flag');
+
+function metaRows(e) {
+  const r = [];
+  r.push(['날짜', `<b>${e.date.replace(/-/g, '.')}</b>${e.dow ? ` (${e.dow})` : ''}${e.time ? ` · ${esc(e.time)}` : ''}`]);
+  if (e.venue) r.push(['장소', esc(e.venue) + (e.floor ? ` <b>${esc(e.floor)}</b>` : '')]);
+  if (e.sponsors && e.sponsors.length) r.push(['후원', e.sponsors.map(esc).join(' · ')]);
+  const scale = [];
+  if (e.applicants) scale.push(`신청 ${e.applicantsNote || e.applicants + '명'}`);
+  if (e.attendees) scale.push(`참석 ${e.attendeesNote || e.attendees + '명'}`);
+  if (e.capacity) scale.push(`정원 ${e.capacity}명`);
+  r.push(['규모', scale.length ? scale.join(' · ') : '<span style="color:var(--ink-3)">공개되지 않음</span>']);
+  if (e.format) r.push(['포맷', esc(e.format)]);
+  r.push(['언어', LANG[e.lang] + (e.paid ? ' · 유료' : '')]);
+  return `<dl class="meta">${r.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>`;
+}
+
+function panelHTML(e) {
+  /* 우측 규격판: 언제·어디서·누가·어디로 */
+  let side = metaRows(e);
+  if (e.speakers && e.speakers.length) {
+    side += `<span class="label">연사</span><ul class="speakers">${e.speakers.map(s =>
+      `<li><b>${esc(s.n)}</b> <span>${esc(s.a)}</span>${s.note ? `<em>${esc(s.note)}</em>` : ''}</li>`).join('')}</ul>`;
+  }
+  if (e.note) side += `<p class="note">${esc(e.note)}</p>`;
+  if (e.links && e.links.length) {
+    side += `<div class="links">${e.links.map(l =>
+      `<a href="${esc(l.u)}" target="_blank" rel="noopener noreferrer">${esc(l.l)}${EXT}</a>`).join('')}</div>`;
+  }
+
+  /* 본문: 그날 오간 말 */
+  let h = '';
+  if (e.firsts && e.firsts.length) {
+    h += `<div class="chipline" style="margin:0 0 1rem">${e.firsts.map(f => `<span class="tag first">${esc(f)}</span>`).join('')}</div>`;
+  }
+  (e.summary || []).forEach(p => { h += `<p>${esc(p)}</p>`; });
+
+  (e.body || []).forEach(b => {
+    h += `<h4>${esc(b.h)}</h4>`;
+    if (b.p) h += `<p class="dim">${esc(b.p)}</p>`;
+    if (b.table) {
+      h += `<div class="tblwrap"><table class="tbl"><thead><tr>${b.table.head.map(x => `<th>${esc(x)}</th>`).join('')}</tr></thead><tbody>${
+        b.table.rows.map(r => `<tr>${r.map(c => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+    }
+    if (b.note) h += `<p class="note">${esc(b.note)}</p>`;
+  });
+
+  (e.quotes || []).forEach(q => {
+    h += `<blockquote class="q${q.pin ? ' pin' : ''}"><p>${esc(q.t)}</p><cite>${esc(q.s)}</cite></blockquote>`;
+  });
+
+  if (e.tables && e.tables.length) {
+    h += `<h4>조별 기록</h4>`;
+    e.tables.forEach(t => {
+      h += `<div class="tblock"><b>${esc(t.who)}</b><ul>${t.pts.map(p => `<li>${esc(p)}</li>`).join('')}</ul></div>`;
+    });
+  }
+
+  if (e.retro) {
+    h += `<div class="plate retro"><span class="label">운영진 공개 회고 · ${esc(e.retro.when)}</span>`;
+    e.retro.items.forEach(i => { h += `<h5>${esc(i.h)}</h5><p>${esc(i.p)}</p>`; });
+    if (e.retro.tail) h += `<p style="color:var(--ink-3);font-size:.84rem;border-top:1px solid var(--rule);padding-top:.7rem;margin-top:.8rem">${esc(e.retro.tail)}</p>`;
+    h += `</div>`;
+  }
+
+  if (e.feedback && e.feedback.length) {
+    h += `<div class="plate"><span class="label">현장 피드백</span>${e.feedback.map(f => `<p>${esc(f)}</p>`).join('')}</div>`;
+  }
+
+  if (e.actions && e.actions.length) {
+    h += `<div class="tblock"><b>운영진 즉시 반영</b><ul>${e.actions.map(a => `<li>${esc(a)}</li>`).join('')}</ul></div>`;
+  }
+
+  if (e.tags && e.tags.length) {
+    h += `<div class="chipline taglist">${e.tags.map(t =>
+      `<button type="button" class="tag act" data-tag="${esc(t)}">${esc(t)}</button>`).join('')}</div>`;
+  }
+  return `<div class="pmain">${h}</div><aside class="pside">${side}</aside>`;
+}
+
+const dir = $('#dir');
+D.events.forEach(e => {
+  const row = el('div', 'row' + (e.today ? ' today' : ''));
+  row.id = 'e' + e.id;
+  row.dataset.id = e.id;
+
+  const scale = e.attendees ? `${e.attendees}명${e.attendeesNote && /\+|역대|약|여/.test(e.attendeesNote) ? '+' : ''}`
+    : (e.applicants ? `<em>신청 ${e.applicants}</em>` : '');
+
+  const badge = e.today ? '<span class="tagnow">오늘</span>' : (e.upcoming ? '<span class="tagsoon">예정</span>' : '');
+
+  const btn = el('button', 'rowbtn', `
+    <span class="rd">${fmtDate(e)}${e.dow ? `<i>${e.dow}</i>` : ''}</span>
+    <span class="rmid">
+      <span class="rt">${esc(e.short)}</span>
+      <span class="rv">${e.venue ? esc(e.venue) : '<span style="color:var(--ink-3)">장소 기록 없음</span>'}${e.floor ? `<span class="floor">${esc(e.floor)}</span>` : ''}${badge}</span>
+    </span>
+    <span class="rright"><span class="rn">${scale}</span><svg class="caret" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.5 8 6l-5 4.5"/></svg></span>`);
+  btn.type = 'button';
+  btn.setAttribute('aria-expanded', 'false');
+  btn.setAttribute('aria-controls', 'p' + e.id);
+  btn.id = 'b' + e.id;
+
+  const panel = el('div', 'panel');
+  panel.id = 'p' + e.id;
+  panel.setAttribute('role', 'region');
+  panel.setAttribute('aria-labelledby', 'b' + e.id);
+  const inner = el('div');
+  const pbody = el('div', 'pbody');
+  inner.append(pbody);
+  panel.append(inner);
+
+  let filled = false;
+  btn.addEventListener('click', () => {
+    const open = row.classList.toggle('open');
+    btn.setAttribute('aria-expanded', String(open));
+    if (open && !filled) { pbody.innerHTML = panelHTML(e); filled = true; }
+    if (open) history.replaceState(null, '', '#e' + e.id);
+  });
+
+  row.append(btn, panel);
+  dir.append(row);
+});
+
+function apply() {
+  let n = 0;
+  D.events.forEach(e => {
+    const row = $('#e' + e.id);
+    let ok = true;
+    if (state.month && e.month !== state.month) ok = false;
+    if (ok && state.kind && e.kind !== state.kind) ok = false;
+    if (ok && state.flag) { const f = FLAGS.find(x => x.id === state.flag); if (f && !f.test(e)) ok = false; }
+    if (ok && state.q && !HAY.get(e.id).includes(state.q)) ok = false;
+    row.hidden = !ok;
+    if (ok) n++;
+  });
+  $('#count').innerHTML = `<b>${n}</b> / ${D.events.length}회 <span style="color:var(--ink-3);font-weight:600">(4.14–8.6 25회 + 8.13 예정)</span>`;
+  $('#empty').hidden = n > 0;
+}
+
+let t;
+$('#q').addEventListener('input', ev => {
+  clearTimeout(t);
+  t = setTimeout(() => { state.q = ev.target.value.trim().toLowerCase(); apply(); }, 120);
+});
+
+$('#reset').addEventListener('click', () => {
+  state.month = state.kind = state.flag = null; state.q = '';
+  $('#q').value = '';
+  document.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', 'false'));
+  apply();
+});
+
+$('#expand').addEventListener('click', ev => {
+  const opening = ev.target.textContent === '전부 펼치기';
+  D.events.forEach(e => {
+    const row = $('#e' + e.id);
+    if (row.hidden) return;
+    const btn = row.querySelector('.rowbtn');
+    if (row.classList.contains('open') !== opening) btn.click();
+  });
+  ev.target.textContent = opening ? '전부 접기' : '전부 펼치기';
+});
+
+apply();
+
+/* 주제 태그를 누르면 그 주제의 회차만 남는다 */
+dir.addEventListener('click', ev => {
+  const t = ev.target.closest('button.tag');
+  if (!t) return;
+  $('#q').value = t.dataset.tag;
+  state.q = t.dataset.tag.toLowerCase();
+  apply();
+  $('#directory').scrollIntoView({ block: 'start' });
+});
+
+/* open a deep-linked row */
+if (location.hash.startsWith('#e')) {
+  const row = document.getElementById(location.hash.slice(1));
+  if (row) { row.querySelector('.rowbtn').click(); row.scrollIntoView({ block: 'center' }); }
+}
+
+/* ── retrospectives ──────────────────────────────────────── */
+const retros = $('#retros');
+D.events.filter(e => e.retro).forEach(e => {
+  const a = el('article');
+  a.innerHTML = `<h3>${esc(e.short)}</h3><span class="when">${esc(e.retro.when)}</span>` +
+    e.retro.items.map(i => `<h5>${esc(i.h)}</h5><p>${esc(i.p)}</p>`).join('') +
+    (e.retro.tail ? `<p class="tail">${esc(e.retro.tail)}</p>` : '') +
+    `<div class="links"><a href="#e${e.id}">그날 기록 전체${ARROW}</a></div>`;
+  a.querySelector('.links a').addEventListener('click', () => {
+    const row = $('#e' + e.id);
+    if (!row.classList.contains('open')) row.querySelector('.rowbtn').click();
+  });
+  retros.append(a);
+});
+
+/* ── themes ──────────────────────────────────────────────── */
+const th = $('#themes-list');
+D.themes.forEach(t => {
+  th.append(el('article', '', `<h3>${esc(t.h)}</h3><div>${t.p ? `<p>${esc(t.p)}</p>` : ''}<ul>${t.pts.map(p => `<li>${esc(p)}</li>`).join('')}</ul></div>`));
+});
+
+/* ── ops ─────────────────────────────────────────────────── */
+$('#issues').querySelector('tbody').innerHTML =
+  D.issueLog.map(r => `<tr>${r.map(c => `<td>${esc(c)}</td>`).join('')}</tr>`).join('');
+$('#approval').textContent = D.approvalNote;
+$('#rebrand').querySelector('tbody').innerHTML =
+  D.rebrand.map(r => `<tr><td>${esc(r.when)}</td><td>${esc(r.name)}</td><td>${esc(r.what)}</td></tr>`).join('');
+
+$('#opnote').innerHTML = esc(D.identity.operator) + ` <a href="${esc(D.businessIdeas.source)}" target="_blank" rel="noopener noreferrer">${esc(D.businessIdeas.intro)}</a>`;
+const biz = $('#biz');
+D.businessIdeas.items.forEach(i => {
+  biz.append(el('article', '', `<h3>${esc(i.h)}</h3><div><ul>${i.pts.map(p => `<li>${esc(p)}</li>`).join('')}</ul></div>`));
+});
+biz.append(el('article', '', `<h3>커뮤니티를 운영한다는 것에 대해</h3><div><ul>${D.businessIdeas.selfView.map(p => `<li>${esc(p)}</li>`).join('')}</ul></div>`));
+
+$('#contrib-intro').textContent = D.contribution.intro;
+const con = $('#contrib');
+D.contribution.items.forEach(i => {
+  con.append(el('article', '', `<h3>${esc(i.h)}</h3><div><ul>${i.pts.map(p => `<li>${esc(p)}</li>`).join('')}</ul></div>`));
+});
+
+/* ── next ────────────────────────────────────────────────── */
+const nx = $('#next-list');
+D.upcoming.forEach(u => {
+  nx.append(el('article', '', `
+    <span class="d">${esc(u.date.replace(/-/g, '.'))}</span>
+    <h3>${esc(u.title)}</h3>
+    <p class="vn">${esc(u.venue)}${u.time ? ' · ' + esc(u.time) : ''}</p>
+    <p>${esc(u.body)}</p>
+    ${u.quote ? `<blockquote class="q pin"><p>${esc(u.quote)}</p><cite>운영진 공지</cite></blockquote>` : ''}
+    ${u.meaning ? `<p class="note">${esc(u.meaning)}</p>` : ''}
+    ${u.verified ? `<p class="ok">${CHECK}<span>${esc(u.verified)}</span></p>` : ''}
+    ${u.links.length ? `<div class="links">${u.links.map(l => `<a href="${esc(l.u)}" target="_blank" rel="noopener noreferrer">${esc(l.l)}${EXT}</a>`).join('')}</div>` : ''}`));
+});
+
+/* ── record ──────────────────────────────────────────────── */
+$('#policy').innerHTML = D.verification.policy.map(p => `<li>${esc(p)}</li>`).join('');
+$('#checked').innerHTML = D.verification.checked.map(c =>
+  `<div${c.warn ? ' class="warn"' : ''}><b>${esc(c.c)}</b><span>${esc(c.r)}</span></div>`).join('');
+$('#unresolved').innerHTML = D.verification.unresolved.map(u => `<li>${esc(u)}</li>`).join('');
+
+$('#channels').innerHTML = D.channels.map(c =>
+  `<a href="${esc(c.u)}" target="_blank" rel="noopener noreferrer">${esc(c.l)}${EXT}</a>`).join('');
+$('#footnote').textContent =
+  `출처: ${D.meta.source}. 수집 시점 ${D.meta.collectedAt}. 이 페이지는 그 기록을 압축한 것이고, 원문에 없는 내용은 넣지 않았다.`;
+
+/* ── theme toggle ────────────────────────────────────────── */
+const tk = 'bloom-theme';
+try { const s = localStorage.getItem(tk); if (s) document.documentElement.dataset.theme = s; } catch {}
+$('#theme').addEventListener('click', () => {
+  const cur = document.documentElement.dataset.theme
+    || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = next;
+  try { localStorage.setItem(tk, next); } catch {}
+});
+</script>
