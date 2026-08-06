@@ -98,10 +98,29 @@ for (const theme of ['light', 'dark']) {
 
   await page.locator('#seg button[data-view="quote"]').click();
   await page.waitForTimeout(200);
-  await page.locator('#topics .chip').first().click();
+  const nTerms = await page.locator('#terms button').count();
+  if (nTerms < 10) out.push(`${theme} 핵심어 ${nTerms}개 (10개 이상 기대)`);
+  await page.locator('#terms button').first().click();
   await page.waitForTimeout(250);
   const filtered = await page.locator('#wall .card').count();
-  if (filtered === 0 || filtered > q0) out.push(`${theme} 주제 필터 결과 ${filtered}건 (0 < n <= ${q0} 기대)`);
+  if (filtered === 0 || filtered > q0) out.push(`${theme} 핵심어 필터 결과 ${filtered}건 (0 < n <= ${q0} 기대)`);
+  if (!(await page.locator('#wall mark').count())) out.push(`${theme} 선택한 핵심어가 본문에 표시되지 않음`);
+  await page.locator('#clearterm').click();
+  await page.waitForTimeout(250);
+  if (await page.locator('#wall mark').count()) out.push(`${theme} 핵심어 해제 후에도 표시가 남음`);
+
+  /* 실명 노출 검사 — 데이터의 전체 이름이 화면에 그대로 나오면 안 된다 */
+  const leaked = await page.evaluate(() => {
+    const KEEP = new Set(['조코딩', '팔로알토', 'KEEPKWAN', 'Kyle', 'junshu', '빌더 조쉬', 'Celina']);
+    const names = new Set();
+    (window.__D || []).forEach(e => (e.speakers || []).forEach(s => {
+      const bare = s.n.replace(/\s*\([^)]*\)\s*/g, '').trim();
+      if (!KEEP.has(bare) && /^[가-힣]{3,4}$/.test(bare)) names.add(bare);
+    }));
+    const text = document.body.innerText;
+    return [...names].filter(n => text.includes(n));
+  });
+  if (leaked.length) out.push(`${theme} 실명 노출: ${leaked.join(', ')}`);
 
   await ctx.close();
 }

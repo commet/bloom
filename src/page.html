@@ -87,6 +87,7 @@ body {
   margin: 0; background: var(--surface-1); color: var(--text-primary);
   font-family: var(--body); font-size: clamp(.92rem, .89rem + .16vw, 1rem);
   line-height: 1.7; letter-spacing: -.006em; word-break: keep-all; overflow-wrap: anywhere;
+  text-wrap: pretty;
   -webkit-font-smoothing: antialiased;
 }
 ::selection { background: var(--sel); color: var(--text-primary); }
@@ -134,8 +135,9 @@ h1, h2, h3 { margin: 0; font-family: var(--ko); font-weight: 800; letter-spacing
   font-size: clamp(.85rem, 2.4vw, 1.02rem); color: var(--text-secondary);
   font-variant-numeric: tabular-nums; margin: .5rem 0 0; letter-spacing: -.01em;
 }
-.mast p.intro { max-width: 40em; margin: 1rem 0 0; color: var(--text-secondary); }
-.mast .disc { margin: .7rem 0 0; font-size: .78rem; color: var(--text-muted); max-width: 42em; }
+.mast p.intro { max-width: 44em; margin: .9rem 0 0; color: var(--text-secondary); text-wrap: pretty; }
+.mast p.intro + p.intro { margin-top: .2rem; }
+.mast .disc { margin: .9rem 0 0; font-size: .78rem; color: var(--text-muted); max-width: none; line-height: 1.55; }
 
 .facts {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr));
@@ -195,10 +197,18 @@ section { padding-top: clamp(2.4rem, 6vw, 4rem); scroll-margin-top: 52px; }
 .herogrid { display: grid; gap: clamp(1.8rem, 4vw, 3.2rem); align-items: start; }
 @media (min-width: 74rem) {
   .herogrid { grid-template-columns: auto minmax(20rem, 1fr); }
-  .heroleft { position: sticky; top: 60px; }
 }
-.heroright { scroll-margin-top: 52px; }
+.heroright { scroll-margin-top: 52px; display: flex; flex-direction: column; min-height: 0; }
 .firsts { margin-top: .2rem; max-width: 46rem; }
+/* 달력 높이에 맞춰 잘리고, 넘치면 목록 안에서만 스크롤한다 */
+.firstwrap { position: relative; min-height: 0; }
+.firstwrap.clip::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 3rem; pointer-events: none;
+  background: linear-gradient(to top, var(--surface-1), transparent);
+}
+.firstwrap > .firsts { overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+.firstwrap > .firsts::-webkit-scrollbar { width: 6px; }
+.firstwrap > .firsts::-webkit-scrollbar-thumb { background: var(--border-strong); border: 0; border-radius: 99px; }
 @media (max-width: 73.99rem) { .firsts { columns: 2 21rem; column-gap: clamp(1.2rem, 3vw, 2.6rem); max-width: none; } }
 @media (max-width: 42rem) { .firsts { columns: 1; } }
 .firsts button {
@@ -213,6 +223,35 @@ section { padding-top: clamp(2.4rem, 6vw, 4rem); scroll-margin-top: 52px; }
 }
 .firsts .t { font-size: .88rem; line-height: 1.5; }
 .firsts .t i { font-style: normal; display: block; font-size: .74rem; color: var(--text-muted); margin-top: .05rem; }
+
+/* ── 핵심어 인덱스 ───────────────────────────────────── */
+.terms {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: .15rem .85rem;
+  padding: 1rem 0 1.1rem; margin-bottom: 1rem;
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+}
+.terms button {
+  font: inherit; font-family: var(--ko); font-weight: 700; letter-spacing: -.03em;
+  background: none; border: 0; padding: .05rem .1rem; cursor: pointer; line-height: 1.25;
+  color: var(--text-secondary); border-radius: 3px;
+  transition: color .15s, opacity .15s;
+}
+.terms button sup {
+  font-family: var(--disp); font-weight: 700; font-size: .5em; vertical-align: super;
+  margin-left: .1em; color: var(--text-muted); font-variant-numeric: tabular-nums;
+}
+.terms button:hover { color: var(--text-primary); }
+.terms button[aria-pressed="true"] { color: var(--s1); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .18em; }
+.terms.has-active button:not([aria-pressed="true"]) { opacity: .42; }
+.active {
+  font-size: .8rem; color: var(--text-secondary);
+}
+.active button {
+  font: inherit; font-size: .78rem; background: none; border: 1px solid var(--border);
+  border-radius: 99px; padding: .1rem .5rem; margin-left: .4rem; cursor: pointer; color: var(--text-secondary);
+}
+.active button:hover { border-color: var(--border-strong); color: var(--text-primary); }
+mark { background: var(--sel); color: inherit; padding: 0 .08em; border-radius: 2px; }
 
 /* ── controls ────────────────────────────────────────── */
 .ctrl { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; margin-bottom: 1rem; }
@@ -272,6 +311,9 @@ section { padding-top: clamp(2.4rem, 6vw, 4rem); scroll-margin-top: 52px; }
 .chart .n { fill: var(--text-secondary); font-size: 11px; font-weight: 500; }
 .chart .m { fill: var(--text-muted); font-size: 10px; font-weight: 600; }
 .chart .gl { stroke: var(--border); stroke-width: 1; }
+.minileg { display: flex; flex-wrap: wrap; gap: .2rem .8rem; margin-top: .5rem; }
+.minileg span { display: inline-flex; align-items: center; gap: .3rem; font-size: .74rem; color: var(--text-secondary); }
+.minileg i { width: 9px; height: 9px; border-radius: 2px; flex: none; }
 
 /* ── next ────────────────────────────────────────────── */
 .next { display: grid; gap: 1.4rem clamp(1.2rem, 3vw, 2.4rem); grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr)); align-items: start; }
@@ -378,11 +420,8 @@ details.method[open] > summary::after { rotate: -135deg; }
 <header class="mast wrap">
   <h1>Bloom 2026</h1>
   <p class="dek" id="dek"></p>
-  <p class="intro">
-    커뮤니티 공지와 후기, 운영진 게시글에 남은 기록을 한 페이지로 정리했습니다.
-    아래 달력의 각 칸은 개별 행사를 나타내며, 선택하면 해당 회차의 연사·조별 정리·발언·원문 링크를
-    확인할 수 있습니다.
-  </p>
+  <p class="intro">커뮤니티 공지와 후기, 운영진 게시글에 남은 기록을 한 페이지로 정리했습니다.</p>
+  <p class="intro">달력의 각 칸은 개별 행사이며, 선택하면 그 회차의 연사·조별 토론·발언·원문 링크가 열립니다.</p>
   <p class="disc" id="disc"></p>
   <div class="facts" id="facts"></div>
 </header>
@@ -407,7 +446,7 @@ details.method[open] > summary::after { rotate: -135deg; }
           <h2>주요 이력</h2>
         </div>
         <p class="note" style="margin:-.5rem 0 .6rem;font-size:.8rem;color:var(--text-muted)">기록에 ‘최초’ 또는 ‘도입’으로 명시된 항목만 날짜순으로 정리했습니다. 선택하면 해당 회차 기록이 열립니다.</p>
-        <div class="firsts" id="firstlist"></div>
+        <div class="firstwrap" id="firstwrap"><div class="firsts" id="firstlist"></div></div>
       </div>
     </div>
   </section>
@@ -415,14 +454,15 @@ details.method[open] > summary::after { rotate: -135deg; }
   <section id="words">
     <div class="shead">
       <h2>발언 기록</h2>
-      <span class="note">모두 원문 그대로 인용했습니다.</span>
+      <span class="note">핵심어를 선택하면 그 단어가 등장한 기록만 남습니다. 모두 원문 그대로입니다.</span>
     </div>
+    <div class="terms" id="terms" role="group" aria-label="핵심어"></div>
     <div class="ctrl">
       <div class="seg" id="seg" role="group" aria-label="보기">
         <button type="button" data-view="quote" aria-pressed="true">발언<em id="cq"></em></button>
         <button type="button" data-view="table" aria-pressed="false">조별 토론<em id="ct"></em></button>
       </div>
-      <div class="chips" id="topics" role="group" aria-label="주제"></div>
+      <span class="active" id="active" hidden></span>
     </div>
     <div class="wall" id="wall"></div>
     <p class="empty" id="wempty" hidden>해당 조건에 맞는 기록이 없습니다.</p>
@@ -474,6 +514,48 @@ const D = /*__DATA__*/;
 
 const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+/* ── 실명은 성만 노출한다 ────────────────────────────────
+   활동명·필명·기관명은 그대로 둔다. 한글 이름은 성 + ○, 라틴 이름은 성(姓)만. */
+const KEEPNAME = new Set([
+  '조코딩', '팔로알토', 'KEEPKWAN', 'Kyle', 'junshu', '빌더 조쉬', 'Celina',
+  '까칠한AI', 'Bloom', 'Claude', 'Anthropic',
+]);
+function maskOne(name) {
+  const n = name.trim();
+  if (!n || KEEPNAME.has(n)) return n;
+  if (/^[가-힣]{2,4}$/.test(n)) return n[0] + '○'.repeat(n.length - 1);
+  const parts = n.split(/\s+/);
+  if (parts.length > 1 && /^[A-Za-z][A-Za-z'-]*$/.test(parts[parts.length - 1])) return parts[parts.length - 1];
+  return n;
+}
+/* 렌더 문자열 전체에 적용할 치환표 — 데이터에 등장하는 실명에서 만든다 */
+const NAMEMAP = (() => {
+  const names = new Set();
+  const add = v => { if (v) names.add(v); };
+  /* 연사 명단과 인물 목록에 실제로 있는 이름만 대상으로 한다.
+     인용 출처에서 긁으면 '운영진'·'참석자' 같은 역할어까지 이름으로 오인한다. */
+  D.events.forEach(e => (e.speakers || []).forEach(sp => {
+    add(sp.n);
+    const m = sp.n.match(/\(([^)]+)\)/);            // '윤석관 (KEEPKWAN)' 같은 병기
+    if (m) add(m[1]);
+  }));
+  (D.people || []).forEach(pp => add((pp.n || '').split(/\s*\(/)[0]));
+  const map = [];
+  names.forEach(n => {
+    const bare = n.replace(/\s*\([^)]*\)\s*/g, '').trim();
+    if (!bare || KEEPNAME.has(bare)) return;
+    const masked = maskOne(bare);
+    if (masked !== bare) map.push([bare, masked]);
+  });
+  return map.sort((a, b) => b[0].length - a[0].length);   // 긴 이름 먼저
+})();
+function mask(str) {
+  let out = String(str);
+  for (const [from, to] of NAMEMAP) out = out.split(from).join(to);
+  return out;
+}
+const T = v => esc(mask(v));
 const SVGNS = 'http://www.w3.org/2000/svg';
 const sv = (t, a = {}) => { const n = document.createElementNS(SVGNS, t); for (const k in a) n.setAttribute(k, a[k]); return n; };
 const EXT = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2h6v6M10 2 3 9"/></svg>';
@@ -487,6 +569,7 @@ const KIND = { talk: '강연', roundtable: '라운드테이블', party: '파티'
 const LANG = { ko: '한국어', en: '영어', mixed: '한/영' };
 
 const E = D.events;
+window.__D = E;   // 점검 스크립트가 원본 이름을 대조하기 위한 참조
 const md = e => e.date.slice(5).replace('-', '.');
 const gOf = e => GROUP[e.kind];
 const col = e => `var(${GVAR[gOf(e)]})`;
@@ -497,8 +580,8 @@ const speakers = new Set();
 E.forEach(e => (e.speakers || []).forEach(s => speakers.add(s.n)));
 
 $('#dek').textContent = `2026.04.14 – 08.06 · 개최 ${held}회 · 서울·싱가포르 · 예정 ${E.length - held}회`;
-$('#disc').textContent =
-  '참석자 개인이 공개 기록을 정리한 비공식 자료입니다. Bloom의 공식 발표가 아니며, 원문에 없는 평가나 해석은 포함하지 않았습니다.';
+$('#disc').innerHTML =
+  '참석자 개인이 공개 기록을 정리한 비공식 자료입니다.<br>Bloom의 공식 발표가 아니며, 원문에 없는 평가나 해석은 포함하지 않았습니다.';
 $('#plotnote').textContent =
   `총 ${E.length}회. 가로축 한 칸이 1주, 세로축이 요일이며 2026년 4월 13일부터 18주간입니다.`;
 
@@ -570,7 +653,7 @@ function drawCalendar() {
         class: 'cell', x: cx(c), y: cy(r), width: cell, height: cell, rx: Math.min(4, cell / 5),
         fill: e.upcoming ? 'var(--surface-1)' : col(e),
         stroke: e.upcoming ? col(e) : 'none', 'stroke-width': e.upcoming ? 2 : 0,
-        tabindex: '0', role: 'button', 'aria-label': `${e.date} ${e.short}. 자세히 보기`,
+        tabindex: '0', role: 'button', 'aria-label': `${e.date} ${mask(e.short)}. 자세히 보기`,
       });
       rect.dataset.id = e.id;
       svg.append(rect);
@@ -607,7 +690,7 @@ function bindCells(svg) {
     const e = E.find(v => v.id === c.dataset.id);
     const show = () => {
       const r = c.getBoundingClientRect(), b = box.getBoundingClientRect();
-      tip.innerHTML = `<b>${md(e)}</b> ${esc(e.short)}<br>${e.venue ? esc(e.venue) : '장소 기록 없음'}`;
+      tip.innerHTML = `<b>${md(e)}</b> ${T(e.short)}<br>${e.venue ? esc(e.venue) : '장소 기록 없음'}`;
       tip.classList.add('on');
       tip.style.left = Math.max(r.left - b.left + box.scrollLeft - 40, 4) + 'px';
       tip.style.top = (r.top - b.top - 8) + 'px';
@@ -632,16 +715,34 @@ $('#legend').innerHTML = GNAME.map((n, i) =>
   + `<span><i style="background:var(--text-secondary);position:relative"><b style="position:absolute;right:1px;top:1px;width:3px;height:3px;border-radius:50%;background:var(--surface-1)"></b></i>영어 진행 <em>${E.filter(e => e.lang === 'en').length}</em></span>`
   + `<span class="hint">칸을 선택하면 해당 회차 기록이 열립니다</span>`;
 
+/* 두 칼럼 높이를 맞춘다 — 이력 목록이 달력보다 길어도 히어로가 한 화면에 머문다 */
+function syncHeroHeight() {
+  const left = document.querySelector('.heroleft');
+  const wrap = $('#firstwrap'), list = $('#firstlist');
+  if (!left || !wrap) return;
+  if (innerWidth < 74 * 16) {
+    list.style.maxHeight = '';
+    wrap.classList.remove('clip');
+    return;
+  }
+  const h = left.getBoundingClientRect().height - wrap.offsetTop + $('.heroright').offsetTop;
+  const target = Math.max(260, h);
+  list.style.maxHeight = target + 'px';
+  wrap.classList.toggle('clip', list.scrollHeight > target + 4);
+}
+
 drawCalendar();
 let rz;
-addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(drawCalendar, 150); });
+addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { drawCalendar(); syncHeroHeight(); }, 150); });
+requestAnimationFrame(syncHeroHeight);
+if (document.fonts) document.fonts.ready.then(syncHeroHeight);
 
 /* ── 처음 있었던 일 ───────────────────────────────────── */
 const FIRSTRE = /첫|처음|최초|도입/;
 $('#firstlist').innerHTML = E.flatMap(e => (e.firsts || []).filter(f => FIRSTRE.test(f)).map(f => ({ e, f })))
   .map(({ e, f }) => `<button type="button" data-id="${e.id}">
     <span class="d">${md(e)}</span>
-    <span class="t">${esc(f)}<i>${esc(e.short)}</i></span></button>`).join('');
+    <span class="t">${T(f)}<i>${T(e.short)}</i></span></button>`).join('');
 $('#firstlist').addEventListener('click', ev => {
   const b = ev.target.closest('button');
   if (b) openEvent(b.dataset.id);
@@ -656,18 +757,43 @@ E.forEach(e => {
 $('#cq').textContent = QUOTES.length;
 $('#ct').textContent = TABLES.length;
 
-const tagN = {};
-E.forEach(e => (e.tags || []).forEach(t => { tagN[t] = (tagN[t] || 0) + 1; }));
-const TOPICS = Object.entries(tagN).filter(([, n]) => n > 1)
-  .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 12).map(([t]) => t);
-let view = 'quote', topic = null, limit = 12;
+/* 기록 전체에서 실제 등장 횟수를 센 핵심어. 목록은 고정, 횟수는 계산값이다. */
+const CANDIDATES = [
+  'AI', '조직', '문제 정의', '하네스', '에이전트', '보안', '신뢰', '데이터', '컨텍스트',
+  '자동화', '도메인', '리터러시', 'AX', '책임', '판단', '검증', '교육', '주니어', '토큰',
+  '고객', '제안', '마케팅', '콘텐츠', '할루시네이션', '워크플로', '글로벌', '실리콘밸리',
+  '창업', '서사', '발표', '스킬', '커뮤니티', '프롬프트', '보안망', '경험', '기획',
+];
+const textOf = it => it.q ? it.q.t + ' ' + it.q.s : it.t.who + ' ' + it.t.pts.join(' ');
 
-$('#topics').innerHTML = TOPICS.map(t =>
-  `<button type="button" class="chip" data-t="${esc(t)}" aria-pressed="false">${esc(t)}<em>${tagN[t]}</em></button>`).join('');
+let view = 'quote', term = null, limit = 12;
+
+const TERMS = (() => {
+  const all = [...QUOTES, ...TABLES].map(textOf);
+  return CANDIDATES
+    .map(t => ({ t, n: all.filter(x => x.includes(t)).length }))
+    .filter(x => x.n >= 3)
+    .sort((a, b) => b.n - a.n)
+    .slice(0, 20);
+})();
+const tMax = Math.max(...TERMS.map(x => x.n));
+
+$('#terms').innerHTML = TERMS.map(({ t, n }) => {
+  const size = (0.92 + (n / tMax) * 1.05).toFixed(2);   // 빈도 = 글자 크기
+  return `<button type="button" data-t="${esc(t)}" aria-pressed="false"
+    style="font-size:${size}rem">${esc(t)}<sup>${n}</sup></button>`;
+}).join('');
+
+/* 선택된 핵심어를 원문 안에서 표시한다 */
+function hl(str) {
+  const out = T(str);
+  if (!term) return out;
+  return out.split(term).join(`<mark>${esc(term)}</mark>`);
+}
 
 function renderWall() {
   const src = view === 'quote' ? QUOTES : TABLES;
-  const all = src.filter(({ e }) => !topic || (e.tags || []).includes(topic));
+  const all = term ? src.filter(it => textOf(it).includes(term)) : src;
   const list = all.slice(0, limit);
   const rest = all.length - list.length;
   const more = $('#more');
@@ -676,12 +802,12 @@ function renderWall() {
   $('#wall').innerHTML = list.map(item => {
     const e = item.e;
     const body = view === 'quote'
-      ? `<q>${esc(item.q.t)}</q><span class="who">${esc(item.q.s)}</span>`
-      : `<span class="grp">${esc(item.t.who)}</span><ul>${item.t.pts.map(p => `<li>${esc(p)}</li>`).join('')}</ul>`;
+      ? `<q>${hl(item.q.t)}</q><span class="who">${T(item.q.s)}</span>`
+      : `<span class="grp">${T(item.t.who)}</span><ul>${item.t.pts.map(p => `<li>${hl(p)}</li>`).join('')}</ul>`;
     return `<button type="button" class="card${view === 'quote' && item.q.pin ? ' pin' : ''}" data-id="${e.id}">
       ${body}
       <span class="meta"><i class="k" style="background:${col(e)}"></i>
-      <span class="d">${md(e)}</span> ${esc(e.short)}<span class="go">→</span></span></button>`;
+      <span class="d">${md(e)}</span> ${T(e.short)}<span class="go">→</span></span></button>`;
   }).join('');
   $('#wempty').hidden = all.length > 0;
 }
@@ -693,13 +819,21 @@ $('#seg').addEventListener('click', ev => {
   $('#seg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
   renderWall();
 });
-$('#topics').addEventListener('click', ev => {
-  const b = ev.target.closest('.chip');
-  if (!b) return;
-  topic = topic === b.dataset.t ? null : b.dataset.t; limit = 12;
-  $('#topics').querySelectorAll('.chip').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.t === topic)));
+function setTerm(t) {
+  term = t; limit = 12;
+  const box = $('#terms');
+  box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.t === term)));
+  box.classList.toggle('has-active', !!term);
+  const act = $('#active');
+  act.hidden = !term;
+  if (term) act.innerHTML = `‘${esc(term)}’이(가) 등장한 기록<button type="button" id="clearterm">해제</button>`;
   renderWall();
+}
+$('#terms').addEventListener('click', ev => {
+  const b = ev.target.closest('button');
+  if (b) setTerm(term === b.dataset.t ? null : b.dataset.t);
 });
+$('#active').addEventListener('click', ev => { if (ev.target.id === 'clearterm') setTerm(null); });
 $('#more').addEventListener('click', () => { limit += 24; renderWall(); });
 $('#wall').addEventListener('click', ev => {
   const c = ev.target.closest('.card');
@@ -719,14 +853,17 @@ function barChart(title, cap, rows, unit) {
     const y = i * rh + (stacked ? 14 : 4);
     const bw = Math.max((r.v / max) * (w - labelW - valW), 2);
     const label = stacked
-      ? `<text class="n" x="0" y="${y - 4}">${esc(r.k)}</text>`
-      : `<text class="n" x="${labelW - 8}" y="${y + 13}" text-anchor="end">${esc(r.k)}</text>`;
+      ? `<text class="n" x="0" y="${y - 4}">${T(r.k)}</text>`
+      : `<text class="n" x="${labelW - 8}" y="${y + 13}" text-anchor="end">${T(r.k)}</text>`;
     return `${label}
-      <rect x="${labelW}" y="${y + 3}" width="${bw}" height="13" rx="3" fill="var(--s1)"/>
+      <rect x="${labelW}" y="${y + 3}" width="${bw}" height="13" rx="3" fill="var(${!r.kind ? '--s1' : r.kind === '신청' ? '--s1' : '--s2'})"/>
       <text class="v" x="${labelW + bw + 6}" y="${y + 13.5}">${r.v.toLocaleString()}${unit || ''}</text>`;
   }).join('');
+  const leg = rows.some(r => r.kind)
+    ? `<div class="minileg"><span><i style="background:var(--s2)"></i>참석</span><span><i style="background:var(--s1)"></i>신청</span></div>`
+    : '';
   return `<div class="chart"><h3>${esc(title)}</h3><p class="cap">${esc(cap)}</p>
-    <svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(title)}">${body}</svg></div>`;
+    <svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(title)}">${body}</svg>${leg}</div>`;
 }
 
 const venueCount = {};
@@ -734,10 +871,44 @@ E.forEach(e => { if (e.venueKey) venueCount[e.venueKey] = (venueCount[e.venueKey
 const repeats = Object.entries(venueCount).filter(([, n]) => n > 1)
   .sort((a, b) => b[1] - a[1]).map(([k, v]) => ({ k, v }));
 
-const attend = E.filter(e => e.attendees).sort((a, b) => b.attendees - a.attendees)
-  .map(e => ({ k: `${md(e)} ${e.short}`, v: e.attendees, id: e.id }));
-const apply = E.filter(e => e.applicants).sort((a, b) => b.applicants - a.applicants)
-  .map(e => ({ k: `${md(e)} ${e.short}`, v: e.applicants, id: e.id }));
+/* 규모 — 참석과 신청은 모두 '사람 수'라 한 축을 공유한다. 계열은 색과 범례로 구분. */
+const scaleRows = [
+  ...E.filter(e => e.attendees).map(e => ({ k: `${md(e)} ${e.short}`, v: e.attendees, kind: '참석' })),
+  ...E.filter(e => e.applicants).map(e => ({ k: `${md(e)} ${e.short}`, v: e.applicants, kind: '신청' })),
+].sort((a, b) => b.v - a.v);
+
+/* 월별 개최 횟수를 형식으로 쌓는다 — 4월 강연 → 5·6월 라운드테이블 중심의 이동이 보인다 */
+function monthMix() {
+  const months = ['04', '05', '06', '07', '08'];
+  const grid = months.map(m => {
+    const es = E.filter(e => e.month === m);
+    return { m, total: es.length, g: [0, 1, 2].map(i => es.filter(e => gOf(e) === i).length) };
+  });
+  const max = Math.max(...grid.map(x => x.total));
+  const w = 320, H = 150, B = 26, T = 20;
+  const cw = w / months.length, bw = Math.min(38, cw - 14);
+  const unit = (H - T - B) / max;
+  const body = grid.map((x, i) => {
+    const cx = i * cw + (cw - bw) / 2;
+    let y = H - B;
+    const segs = x.g.map((n, gi) => {
+      if (!n) return '';
+      const hh = n * unit;
+      y -= hh;
+      return `<rect x="${cx}" y="${y + (gi ? 2 : 0)}" width="${bw}" height="${Math.max(hh - (gi ? 2 : 0), 1)}"
+        rx="2" fill="var(${GVAR[gi]})"/>`;
+    }).join('');
+    return `${segs}
+      <text class="v" x="${cx + bw / 2}" y="${y - 6}" text-anchor="middle">${x.total}</text>
+      <text class="m" x="${cx + bw / 2}" y="${H - 8}" text-anchor="middle">${+x.m}월</text>`;
+  }).join('');
+  return `<div class="chart"><h3>월별 개최 횟수</h3>
+    <p class="cap">형식별로 쌓았습니다. 8월은 6일까지와 예정 1회.</p>
+    <svg viewBox="0 0 ${w} ${H}" role="img" aria-label="월별 개최 횟수를 형식별로 쌓은 막대그래프">
+      <line class="gl" x1="0" x2="${w}" y1="${H - B}" y2="${H - B}"/>${body}</svg>
+    <div class="minileg">${GNAME.map((n, i) =>
+      `<span><i style="background:var(${GVAR[i]})"></i>${esc(n.split(' (')[0])}</span>`).join('')}</div></div>`;
+}
 
 function growthChart() {
   const w = 320, h = 138, L = 10, R = 10, T = 28, B = 26, MAXN = 3000;
@@ -761,9 +932,9 @@ function growthChart() {
 }
 
 $('#charts').innerHTML =
-  barChart('장소별 개최 횟수', '2회 이상 사용된 장소. 운영 주체 기준.', repeats, '회')
-  + barChart('참석 인원', `참석 인원이 공개된 ${attend.length}회.`, attend, '명')
-  + barChart('신청 인원', `신청 인원이 공개된 ${apply.length}회.`, apply, '명')
+  monthMix()
+  + barChart('장소별 개최 횟수', '2회 이상 사용된 장소. 운영 주체 기준.', repeats, '회')
+  + barChart('공개된 규모', '참석 또는 신청 인원이 기록에 남은 회차.', scaleRows, '명')
   + growthChart();
 
 /* ── 다음 ────────────────────────────────────────────── */
@@ -814,26 +985,26 @@ function detail(e) {
   if (e.firsts && e.firsts.length) {
     h += `<div class="tags" style="margin:-.5rem 0 1.1rem">${e.firsts.map(f => `<span class="f">${esc(f)}</span>`).join('')}</div>`;
   }
-  (e.summary || []).forEach(p => { h += `<p class="lead">${esc(p)}</p>`; });
+  (e.summary || []).forEach(p => { h += `<p class="lead">${T(p)}</p>`; });
 
   if (e.speakers && e.speakers.length) {
     h += `<h4>연사</h4><ul class="sp">${e.speakers.map(s =>
-      `<li><b>${esc(s.n)}</b> ${esc(s.a)}${s.note ? `<em>${esc(s.note)}</em>` : ''}</li>`).join('')}</ul>`;
+      `<li><b>${T(s.n)}</b> ${T(s.a)}${s.note ? `<em>${T(s.note)}</em>` : ''}</li>`).join('')}</ul>`;
   }
 
   (e.body || []).forEach(b => {
-    h += `<h4>${esc(b.h)}</h4>`;
-    if (b.p) h += `<p>${esc(b.p)}</p>`;
+    h += `<h4>${T(b.h)}</h4>`;
+    if (b.p) h += `<p>${T(b.p)}</p>`;
     if (b.table) h += `<table><thead><tr>${b.table.head.map(x => `<th>${esc(x)}</th>`).join('')}</tr></thead><tbody>${
       b.table.rows.map(r => `<tr>${r.map(c => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
     if (b.note) h += `<p class="note">${esc(b.note)}</p>`;
   });
 
-  (e.quotes || []).forEach(q => { h += `<blockquote><p>${esc(q.t)}</p><cite>${esc(q.s)}</cite></blockquote>`; });
+  (e.quotes || []).forEach(q => { h += `<blockquote><p>${T(q.t)}</p><cite>${T(q.s)}</cite></blockquote>`; });
 
   if (e.tables && e.tables.length) {
     h += `<h4>조별 토론 정리</h4>`;
-    e.tables.forEach(t => { h += `<div class="grp"><b>${esc(t.who)}</b><ul>${t.pts.map(p => `<li>${esc(p)}</li>`).join('')}</ul></div>`; });
+    e.tables.forEach(t => { h += `<div class="grp"><b>${T(t.who)}</b><ul>${t.pts.map(p => `<li>${T(p)}</li>`).join('')}</ul></div>`; });
   }
   if (e.retro) {
     h += `<div class="box"><span class="lbl">운영진 공개 회고 · ${esc(e.retro.when)}</span>`;
@@ -842,7 +1013,7 @@ function detail(e) {
     h += `</div>`;
   }
   if (e.feedback && e.feedback.length) {
-    h += `<div class="box"><span class="lbl">참석자 피드백</span>${e.feedback.map(f => `<p>${esc(f)}</p>`).join('')}</div>`;
+    h += `<div class="box"><span class="lbl">참석자 피드백</span>${e.feedback.map(f => `<p>${T(f)}</p>`).join('')}</div>`;
   }
   if (e.actions && e.actions.length) {
     h += `<div class="grp"><b>운영진 후속 조치</b><ul>${e.actions.map(a => `<li>${esc(a)}</li>`).join('')}</ul></div>`;
@@ -861,7 +1032,7 @@ function openEvent(id) {
   if (!e) return;
   lastFocus = document.activeElement;
   $('#ddate').textContent = `${e.date.replace(/-/g, '.')}${e.dow ? ` (${e.dow})` : ''}`;
-  $('#dtitle').textContent = e.title;
+  $('#dtitle').textContent = mask(e.title);
   dbody.innerHTML = detail(e);
   dbody.scrollTop = 0;
   drawer.hidden = false;
@@ -897,5 +1068,6 @@ $('#theme').addEventListener('click', () => {
   document.documentElement.dataset.theme = next;
   try { localStorage.setItem('bloom-theme', next); } catch (e) {}
   drawCalendar();
+  syncHeroHeight();
 });
 </script>
