@@ -71,12 +71,31 @@ OG 메타의 URL 은 절대 경로여야 스크레이퍼가 안전하게 가져�
 SITE_URL=https://<도메인> FONTS_DIR=... node build.mjs
 ```
 
+## 참여 기능 (Supabase)
+
+발언 공감과 기록 제보는 Supabase 의 `bloom_marks` / `bloom_notes` 에 쌓인다.
+테이블은 RLS 를 켜고 정책을 두지 않아 anon 이 직접 만질 수 없고, `SECURITY DEFINER` 함수
+세 개만 열려 있다 — `bloom_mark_counts`, `bloom_mark`, `bloom_note`.
+
+```bash
+SUPABASE_URL=... SUPABASE_ANON_KEY=... node build.mjs
+```
+
+익명 키는 공개돼도 되는 값이다(그래서 이름이 anon 이다). 두 값이 없으면 참여 UI 가 꺼진 상태로
+빌드된다. 제보는 자동 노출되지 않으므로 주기적으로 확인해야 한다:
+
+```sql
+select created_at, kind, event_id, body, contact from public.bloom_notes
+where status = 'new' order by created_at desc;
+```
+
 ## 점검
 
 ```bash
 node tools/check.mjs   # 대비(WCAG AA) + 달력·드로어·필터 동작, 두 테마 모두
 node tools/audit.mjs   # 390/768/1440px 가로 넘침
 node tools/shoot.mjs   # 라이트·다크·모바일 스크린샷 → dist/shots/
+node tools/participate.mjs  # 공감·제보 (RPC 응답을 흉내 내서 클라이언트 로직만)
 ```
 
 대비 검사는 반투명 배경을 아래 레이어와 합성한 뒤 계산한다. 이 검사가 실제로 두 건을 잡아냈다 —

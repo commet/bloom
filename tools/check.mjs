@@ -17,7 +17,12 @@ for (const theme of ['light', 'dark']) {
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
   const page = await ctx.newPage();
   page.on('pageerror', e => out.push(`${theme} JS 오류: ${e.message}`));
-  page.on('console', m => m.type() === 'error' && out.push(`${theme} 콘솔 오류: ${m.text()}`));
+  // 이 환경은 supabase.co 로 나갈 수 없다 — 참여 기능의 네트워크 실패는 환경 탓이므로 거른다
+  page.on('console', m => {
+    if (m.type() !== 'error') return;
+    if (/ERR_TUNNEL_CONNECTION_FAILED|ERR_NAME_NOT_RESOLVED|supabase\.co/.test(m.text())) return;
+    out.push(`${theme} 콘솔 오류: ${m.text()}`);
+  });
   await page.goto(url);
   await page.evaluate(t => { document.documentElement.dataset.theme = t; }, theme);
   await page.evaluate(() => document.querySelector('#more')?.click());

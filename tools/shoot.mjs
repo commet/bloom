@@ -20,7 +20,11 @@ for (const [name, vp, theme] of [
   const ctx = await browser.newContext({ viewport: vp, deviceScaleFactor: 2, colorScheme: theme });
   const page = await ctx.newPage();
   page.on('pageerror', e => errs.push(`${name}: ${e.message}`));
-  page.on('console', m => m.type() === 'error' && errs.push(`${name}: ${m.text()}`));
+  page.on('console', m => {
+    if (m.type() !== 'error') return;
+    if (/ERR_TUNNEL_CONNECTION_FAILED|ERR_NAME_NOT_RESOLVED|supabase\.co/.test(m.text())) return;  // 이 환경은 외부로 못 나간다
+    errs.push(`${name}: ${m.text()}`);
+  });
   await page.goto(url, { waitUntil: 'load' });
   await page.addStyleTag({ content: 'html{scroll-behavior:auto!important}' });
   if (theme === 'dark') { await page.evaluate(() => document.querySelector('#theme').click()); await page.waitForTimeout(200); }

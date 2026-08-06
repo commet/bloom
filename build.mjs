@@ -44,6 +44,14 @@ let html = readFileSync(p('src/page.html'), 'utf8');
 const site = (process.env.SITE_URL || '').replace(/\/+$/, '');
 html = html.split('__SITE__').join(site);
 if (!site) console.log('SITE_URL 미지정 — og:image 를 루트 상대 경로로 둔다');
+
+// 참여 기능(공감·제보)은 Supabase 익명 키로 동작한다. RLS 로 테이블을 직접 열지 않고
+// SECURITY DEFINER 함수만 호출하므로 이 키가 공개돼도 되는 값이다.
+// 값이 없으면 참여 UI 는 조용히 꺼진 상태로 빌드된다.
+html = html
+  .split('__SB_URL__').join(process.env.SUPABASE_URL || '')
+  .split('__SB_KEY__').join(process.env.SUPABASE_ANON_KEY || '');
+if (!process.env.SUPABASE_URL) console.log('SUPABASE_URL 미지정 — 참여 기능 비활성 상태로 빌드');
 const json = JSON.stringify(payload).replace(/<\//g, '<\\/');
 html = html.replace('/*__DATA__*/', json);
 
