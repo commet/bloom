@@ -38,6 +38,12 @@ const payload = {
 };
 
 let html = readFileSync(p('src/page.html'), 'utf8');
+
+// 링크 미리보기 메타는 절대 URL 이라야 스크레이퍼가 안전하게 가져간다.
+// SITE_URL 이 없으면 루트 상대 경로로 두고, 배포 도메인이 정해지면 넣어서 다시 빌드한다.
+const site = (process.env.SITE_URL || '').replace(/\/+$/, '');
+html = html.split('__SITE__').join(site);
+if (!site) console.log('SITE_URL 미지정 — og:image 를 루트 상대 경로로 둔다');
 const json = JSON.stringify(payload).replace(/<\//g, '<\\/');
 html = html.replace('/*__DATA__*/', json);
 

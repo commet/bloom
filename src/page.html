@@ -17,6 +17,23 @@ the verdict, and DESIGN.md.
 <title>Bloom 2026 · 4–8월 활동 기록</title>
 <meta name="description" content="Bloom 커뮤니티의 2026년 4~8월 활동 기록. 행사 26회의 일정·장소·연사·조별 정리·발언을 한 페이지에 정리했습니다.">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<!-- 링크 미리보기 (카카오톡·슬랙·X). __SITE__ 는 빌드 때 SITE_URL 로 치환된다. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Bloom 아카이브">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="Bloom 2026 · 4–8월 활동 기록">
+<meta property="og:description" content="행사 26회를 달력 한 장으로. 각 회차의 연사·조별 토론·발언을 원문 그대로 모았습니다.">
+<meta property="og:url" content="__SITE__/">
+<meta property="og:image" content="__SITE__/og.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="2026년 4월부터 8월까지 열린 행사 26회를 요일별 달력으로 표시한 그래프">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Bloom 2026 · 4–8월 활동 기록">
+<meta name="twitter:description" content="행사 26회를 달력 한 장으로. 각 회차의 연사·조별 토론·발언을 원문 그대로 모았습니다.">
+<meta name="twitter:image" content="__SITE__/og.png">
 <script>
 (function () {
   var d = document, h = d.head;
@@ -76,8 +93,8 @@ the verdict, and DESIGN.md.
   --ko: "Gothic A1", "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
   --body: ui-sans-serif, -apple-system, "Apple SD Gothic Neo", "Pretendard",
           "Segoe UI", "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
-  --pad: clamp(1.05rem, 4vw, 2.75rem);
-  --max: 84rem;
+  --pad: clamp(1rem, 3vw, 2rem);
+  --max: 94rem;
   --ease: cubic-bezier(.16, 1, .3, 1);
 }
 
@@ -196,7 +213,7 @@ section { padding-top: clamp(2.4rem, 6vw, 4rem); scroll-margin-top: 52px; }
 /* ── hero: 달력 + 처음 있었던 일 ─────────────────────── */
 .herogrid { display: grid; gap: clamp(1.8rem, 4vw, 3.2rem); align-items: start; }
 @media (min-width: 74rem) {
-  .herogrid { grid-template-columns: auto minmax(20rem, 1fr); }
+  .herogrid { grid-template-columns: minmax(0, auto) minmax(20rem, 1fr); }
 }
 .heroright { scroll-margin-top: 52px; display: flex; flex-direction: column; min-height: 0; }
 .firsts { margin-top: .2rem; max-width: 46rem; }
@@ -607,10 +624,16 @@ const dowCount = DOW.map((_, r) => E.filter(e => cellOf(e.date).row === r).lengt
 const dowMax = Math.max(...dowCount);
 
 function drawCalendar() {
+  if (!drawCalendar.retry) drawCalendar.cap = 40;
   const svg = $('#cal'), box = $('#plotbox');
-  const avail = Math.max(560, box.clientWidth + 2);
-  const LEFT = 24, MARG = 92, GAPC = 4, TOP = 24;
-  const cell = Math.max(13, Math.min(40, Math.floor((avail - LEFT - MARG - GAPC * (WEEKS - 1)) / WEEKS)));
+  /* 그릴 수 있는 실폭을 정확히 재서 칸 크기를 역산한다.
+     넘치면 가로 스크롤이 생기고, 어중간하게 몇 px만 넘치면 그게 제일 거슬린다. */
+  const cs = getComputedStyle(box);
+  const avail = box.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) - 2;
+  const narrow = avail < 520;
+  const LEFT = narrow ? 18 : 24, MARG = narrow ? 56 : 92, GAPC = narrow ? 3 : 4, TOP = 24;
+  const cellCap = drawCalendar.cap || 40;
+  const cell = Math.max(10, Math.min(cellCap, Math.floor((avail - LEFT - MARG - GAPC * (WEEKS - 1)) / WEEKS)));
   const step = cell + GAPC;
   const gridW = WEEKS * step - GAPC;
   const W = LEFT + gridW + MARG;
@@ -667,7 +690,7 @@ function drawCalendar() {
   }
 
   /* 요일별 합계 — 세로축을 공유하는 주변 분포 */
-  const mx = LEFT + gridW + 22, mw = MARG - 40;
+  const mx = LEFT + gridW + (narrow ? 12 : 22), mw = MARG - (narrow ? 26 : 40);
   const cap = sv('text', { class: 'cap', x: mx, y: TOP - 9 });
   cap.textContent = '요일 합계';
   svg.append(cap);
@@ -682,6 +705,15 @@ function drawCalendar() {
   });
 
   bindCells(svg);
+
+  /* 레이아웃이 확정된 뒤 남으면 한 단계 줄여 다시 그린다 — 몇 px 넘치는 스크롤이 제일 거슬린다 */
+  if (!drawCalendar.retry && box.scrollWidth > box.clientWidth + 1) {
+    drawCalendar.retry = true;
+    drawCalendar.cap = cell - 1;
+    drawCalendar();
+    drawCalendar.retry = false;
+    return;
+  }
 }
 
 function bindCells(svg) {
@@ -734,8 +766,8 @@ function syncHeroHeight() {
 drawCalendar();
 let rz;
 addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { drawCalendar(); syncHeroHeight(); }, 150); });
-requestAnimationFrame(syncHeroHeight);
-if (document.fonts) document.fonts.ready.then(syncHeroHeight);
+requestAnimationFrame(() => { drawCalendar(); syncHeroHeight(); });
+if (document.fonts) document.fonts.ready.then(() => { drawCalendar(); syncHeroHeight(); });
 
 /* ── 처음 있었던 일 ───────────────────────────────────── */
 const FIRSTRE = /첫|처음|최초|도입/;

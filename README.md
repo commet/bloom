@@ -55,6 +55,22 @@ pip install fonttools brotli                                  # 서브셋에 필
 Gothic A1을 하나로 병합한다 (조각별 오버헤드가 사라져 175KB → 55KB). Archivo는 가변 축을
 그대로 유지한 채 잘라낸다.
 
+## 링크 미리보기
+
+카카오톡·슬랙·X 에서 링크를 펼쳤을 때 보이는 카드는 `dist/og.png` (1200×630) 다. 실제 페이지를
+열어 달력을 그대로 다시 그려 만들기 때문에, 데이터가 바뀌면 이미지도 따라 바뀐다.
+
+```bash
+node build.mjs && node tools/og.mjs && git add dist/og.png
+```
+
+OG 메타의 URL 은 절대 경로여야 스크레이퍼가 안전하게 가져간다. 배포 도메인이 정해지면 넣어서
+다시 빌드한다. 넣지 않으면 루트 상대 경로(`/og.png`)로 남는다.
+
+```bash
+SITE_URL=https://<도메인> FONTS_DIR=... node build.mjs
+```
+
 ## 점검
 
 ```bash
