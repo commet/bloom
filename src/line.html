@@ -1,0 +1,680 @@
+<!--
+THESIS: One line from tonight's room, placed on the four-month record. Not a poll — a
+lookup. You say what you're taking away; the archive shows you who said it before.
+OWN-WORLD: Same almanac data sheet as the archive — paper white, Archivo figures, hairline
+rules. Chrome monochrome. Only two hues carry meaning: the room's lines, and the ones the
+record has never held.
+FORM: Single input, then a card. Presenter view is the same data on the archive's own
+time axis, filling as the room answers.
+-->
+<title>당신의 한 줄 · Bloom 회고 2026.08.06</title>
+<meta name="description" content="오늘 회고에서 가져갈 한 줄을 26회 기록의 갈래 위에 놓아 봅니다.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Bloom 아카이브">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="당신의 한 줄 · Bloom 회고 2026.08.06">
+<meta property="og:description" content="오늘 가져갈 한 줄이 4개월 기록의 어느 갈래에 놓이는지 확인합니다.">
+<meta property="og:url" content="__SITE__/line">
+<meta property="og:image" content="__SITE__/og.png">
+
+<script>
+(function () {
+  var d = document, h = d.head;
+  d.documentElement.lang = 'ko';
+  if (!h.querySelector('meta[name="viewport"]')) {
+    var m = d.createElement('meta');
+    m.name = 'viewport';
+    m.content = 'width=device-width, initial-scale=1, viewport-fit=cover';
+    h.appendChild(m);
+  }
+  if (!d.title) d.title = '당신의 한 줄 · Bloom 회고 2026.08.06';
+  try { d.documentElement.dataset.theme = localStorage.getItem('bloom-theme') || 'light'; }
+  catch (e) { d.documentElement.dataset.theme = 'light'; }
+})();
+</script>
+
+<style>/*__FONTS__*/</style>
+
+<style>
+:root, :root[data-theme="light"] {
+  color-scheme: light;
+  --surface-1: #fcfcfb; --surface-2: #f3f3f0; --surface-3: #ffffff;
+  --text-primary: #0b0b0b; --text-secondary: #52514e; --text-muted: #706e67;
+  --border: #e4e3df; --border-strong: #c6c4be;
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a;
+  --ok: #14805a; --warn: #b34a12; --sel: #d8e6f8;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface-1: #1a1a19; --surface-2: #232322; --surface-3: #262624;
+  --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #93918a;
+  --border: #33332f; --border-strong: #4d4d47;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70;
+  --ok: #45b98a; --warn: #ef8b5e; --sel: #2f3b4a;
+}
+:root {
+  --disp: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --ko: "Gothic A1", "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+  --body: ui-sans-serif, -apple-system, "Apple SD Gothic Neo", "Pretendard",
+          "Segoe UI", "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
+  --pad: clamp(1rem, 3vw, 2rem);
+  --max: 94rem;
+  --ease: cubic-bezier(.16, 1, .3, 1);
+}
+
+* { box-sizing: border-box; min-width: 0; }
+html { background: var(--surface-1); scrollbar-color: var(--border-strong) var(--surface-1); }
+body {
+  margin: 0; background: var(--surface-1); color: var(--text-primary);
+  font-family: var(--body); font-size: clamp(.92rem, .89rem + .16vw, 1rem);
+  line-height: 1.7; letter-spacing: -.006em; word-break: keep-all; overflow-wrap: anywhere;
+  text-wrap: pretty; -webkit-font-smoothing: antialiased;
+}
+::selection { background: var(--sel); color: var(--text-primary); }
+:focus-visible { outline: 2px solid var(--text-primary); outline-offset: 2px; border-radius: 2px; }
+a { color: inherit; text-decoration-color: var(--border-strong); text-underline-offset: .2em; }
+
+.wrap { max-width: var(--max); margin-inline: auto; padding-inline: var(--pad); }
+.lbl {
+  font-family: var(--disp); font-weight: 600; font-size: .66rem; letter-spacing: .13em;
+  text-transform: uppercase; color: var(--text-muted); font-variation-settings: "wdth" 88;
+}
+h1, h2, h3 { margin: 0; font-family: var(--ko); font-weight: 800; letter-spacing: -.035em; line-height: 1.2; text-wrap: balance; }
+
+.bar { position: sticky; top: 0; z-index: 30; background: var(--surface-1); border-bottom: 1px solid var(--border); }
+.bar-in {
+  max-width: var(--max); margin-inline: auto; padding: 0 var(--pad); height: 44px;
+  display: flex; align-items: center; gap: .1rem; overflow-x: auto; scrollbar-width: none;
+}
+.bar-in::-webkit-scrollbar { display: none; }
+.bar b {
+  font-family: var(--disp); font-weight: 800; font-size: .88rem; letter-spacing: -.02em;
+  font-variation-settings: "wdth" 108; margin-right: .7rem; flex: none; white-space: nowrap;
+}
+.bar a, .bar button {
+  flex: none; white-space: nowrap; font: inherit; font-family: var(--body); font-weight: 500;
+  font-size: .8rem; color: var(--text-secondary); background: none; border: 0;
+  padding: .3rem .5rem; cursor: pointer; text-decoration: none; border-radius: 3px;
+}
+.bar a:hover, .bar button:hover { color: var(--text-primary); background: var(--surface-2); }
+.bar .sp { margin-left: auto; }
+
+.mast { padding-block: clamp(1.6rem, 4.5vw, 2.8rem) 0; }
+.mast h1 {
+  font-family: var(--disp); font-weight: 800; font-variation-settings: "wdth" 112;
+  font-size: clamp(2.1rem, 7.5vw, 3.6rem); letter-spacing: -.045em; line-height: .95;
+}
+.mast .dek {
+  font-family: var(--disp); font-weight: 600; font-variation-settings: "wdth" 95;
+  font-size: clamp(.85rem, 2.4vw, 1rem); color: var(--text-secondary);
+  font-variant-numeric: tabular-nums; margin: .5rem 0 0; letter-spacing: -.01em;
+}
+.mast p.intro { max-width: 40em; margin: .8rem 0 0; color: var(--text-secondary); }
+
+main > section { padding-top: clamp(1.8rem, 5vw, 2.8rem); }
+.shead { display: flex; align-items: baseline; gap: .8rem; flex-wrap: wrap; margin-bottom: .9rem; }
+.shead h2 { font-size: clamp(1.15rem, 1.02rem + .7vw, 1.5rem); }
+.shead .note { font-size: .8rem; color: var(--text-muted); }
+
+/* ── 입력 ───────────────────────────────────────────── */
+.ask { border-top: 1px solid var(--border); padding-top: 1.4rem; }
+.ask textarea {
+  width: 100%; font: inherit; font-family: var(--ko); font-weight: 600; font-size: 1.05rem;
+  line-height: 1.5; letter-spacing: -.025em; background: var(--surface-3);
+  border: 1px solid var(--border-strong); border-radius: 6px; padding: .8rem .9rem;
+  resize: vertical; min-height: 5.2rem; color: inherit;
+}
+.ask textarea::placeholder { color: var(--text-muted); font-weight: 500; }
+.askfoot { display: flex; align-items: center; gap: .8rem; margin-top: .7rem; flex-wrap: wrap; }
+.count { font-family: var(--disp); font-weight: 700; font-size: .74rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.count.over { color: var(--warn); }
+.send {
+  font: inherit; font-weight: 600; font-size: .85rem; background: var(--text-primary);
+  color: var(--surface-1); border: 0; border-radius: 5px; padding: .5rem 1.1rem; cursor: pointer;
+}
+.send:disabled { opacity: .45; cursor: default; }
+.msg { font-size: .78rem; color: var(--text-muted); }
+.msg.err { color: var(--warn); }
+
+/* ── 카드 ───────────────────────────────────────────── */
+.card {
+  border: 1px solid var(--border-strong); border-radius: 8px; background: var(--surface-3);
+  padding: clamp(1.1rem, 3.4vw, 1.7rem); margin-top: 1.2rem;
+}
+.card .top { display: flex; align-items: baseline; justify-content: space-between; gap: .8rem; }
+.card .mine {
+  font-family: var(--ko); font-weight: 800; font-size: clamp(1.15rem, 4.2vw, 1.5rem);
+  line-height: 1.4; letter-spacing: -.035em; margin: .5rem 0 0;
+}
+.card .verdict {
+  margin: 1.1rem 0 0; padding-top: 1rem; border-top: 1px solid var(--border);
+  font-size: .88rem; color: var(--text-secondary);
+}
+.card .lane {
+  display: block; font-family: var(--ko); font-weight: 800; font-size: 1.02rem;
+  letter-spacing: -.03em; color: var(--text-primary); margin-top: .25rem; line-height: 1.35;
+}
+.card ol { list-style: none; margin: .9rem 0 0; padding: 0; }
+.card ol li { display: grid; grid-template-columns: 3.1rem 1fr; gap: .7rem; padding: .45rem 0; border-top: 1px dotted var(--border); font-size: .85rem; }
+.card ol li .d { font-family: var(--disp); font-weight: 700; font-size: .78rem; color: var(--text-muted); font-variant-numeric: tabular-nums; padding-top: .12rem; }
+.card ol li .w { display: block; font-size: .72rem; color: var(--text-muted); margin-top: .15rem; }
+.card .rank {
+  margin: 1.1rem 0 0; font-family: var(--disp); font-weight: 800; font-variation-settings: "wdth" 104;
+  font-size: clamp(1.05rem, 3.2vw, 1.25rem); letter-spacing: -.03em; font-variant-numeric: tabular-nums;
+}
+.card.isnew { border-color: var(--s2); }
+.card.isnew .rank { color: var(--warn); }
+.fix { margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+.fix .lbl { display: block; margin-bottom: .5rem; }
+.chips { display: flex; flex-wrap: wrap; gap: .3rem; }
+.chip {
+  font: inherit; font-size: .76rem; background: none; color: var(--text-secondary);
+  border: 1px solid var(--border); border-radius: 99px; padding: .22rem .6rem; cursor: pointer;
+}
+.chip:hover { border-color: var(--border-strong); color: var(--text-primary); }
+.chip[aria-pressed="true"] { background: var(--text-primary); color: var(--surface-1); border-color: var(--text-primary); }
+.acts { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: 1rem; }
+.ghost {
+  font: inherit; font-size: .82rem; font-weight: 600; background: none; color: var(--text-primary);
+  border: 1px solid var(--border-strong); border-radius: 5px; padding: .45rem .9rem; cursor: pointer;
+}
+.ghost:hover { background: var(--surface-2); }
+
+/* ── 오늘 이 방 ─────────────────────────────────────── */
+.board { margin-top: .6rem; }
+.lane-row { border-top: 1px solid var(--border); padding: .7rem 0; }
+.lane-row:last-child { border-bottom: 1px solid var(--border); }
+.lane-row .h { display: flex; align-items: baseline; gap: .6rem; }
+.lane-row .h b { font-family: var(--ko); font-weight: 800; font-size: .93rem; letter-spacing: -.03em; }
+.lane-row .h .n { font-family: var(--disp); font-weight: 800; font-size: .8rem; color: var(--text-muted); font-variant-numeric: tabular-nums; margin-left: auto; flex: none; }
+.lane-row ul { list-style: none; margin: .45rem 0 0; padding: 0; }
+.lane-row li { font-size: .85rem; color: var(--text-secondary); padding: .15rem 0 .15rem .8rem; border-left: 2px solid var(--border); }
+.lane-row.newlane .h b { color: var(--warn); }
+.lane-row.newlane li { border-left-color: var(--warn); }
+.empty { font-size: .82rem; color: var(--text-muted); padding: .9rem 0; }
+
+/* ── 발표자 화면 ────────────────────────────────────── */
+body.screen .bar, body.screen main { display: none; }
+body.screen { overflow: hidden; }
+.stage { display: none; }
+body.screen .stage { display: flex; flex-direction: column; height: 100vh; padding: clamp(1.2rem, 3vw, 2.4rem); }
+.stage .head { display: flex; align-items: flex-start; justify-content: space-between; gap: 2rem; flex: none; }
+.stage h1 { font-family: var(--disp); font-weight: 800; font-variation-settings: "wdth" 112; font-size: clamp(1.8rem, 4vw, 3rem); letter-spacing: -.045em; }
+.stage .sub { font-family: var(--disp); font-weight: 600; font-size: clamp(.8rem, 1.2vw, 1rem); color: var(--text-secondary); margin-top: .35rem; font-variant-numeric: tabular-nums; }
+.stage .legend { display: flex; gap: 1.1rem; flex-wrap: wrap; margin: .7rem 0 0; font-size: clamp(.72rem, 1vw, .9rem); color: var(--text-muted); }
+.stage .legend span { display: inline-flex; align-items: center; gap: .35rem; }
+.stage .legend .k { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+.stage .legend .k.past { background: var(--border-strong); }
+.stage .legend .k.now { background: var(--s1); }
+.stage .legend .k.new { background: var(--s2); }
+.stage .joinq { text-align: right; flex: none; }
+.stage .joinq #qr svg { display: block; width: clamp(150px, 16vw, 270px); height: auto; border: 8px solid #fff; background: #fff; border-radius: 3px; }
+.stage .joinq .u { font-family: var(--disp); font-weight: 700; font-size: clamp(.8rem, 1.1vw, 1rem); margin-top: .5rem; color: var(--text-secondary); }
+.stage .plot { flex: 1; min-height: 0; margin-top: clamp(.8rem, 2vw, 1.6rem); display: flex; align-items: center; }
+.stage svg { width: 100%; display: block; }
+.stage .foot2 { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-top: 1rem; flex: none; }
+.stage .tally { font-family: var(--disp); font-weight: 800; font-variation-settings: "wdth" 104; font-size: clamp(1.4rem, 3.4vw, 2.6rem); letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+.stage .tally i { font-style: normal; font-size: .42em; font-weight: 600; color: var(--text-muted); margin-left: .3em; letter-spacing: 0; }
+.stage .nextup { font-family: var(--disp); font-weight: 600; font-size: clamp(.8rem, 1.3vw, 1.05rem); color: var(--text-muted); font-variant-numeric: tabular-nums; }
+#cal text { font-family: var(--disp); font-variant-numeric: tabular-nums; }
+.dot-past { fill: var(--border-strong); }
+.dot-now { fill: var(--s1); }
+.dot-new { fill: var(--s2); }
+.trackline { stroke: var(--border); stroke-width: 1; }
+.tracklab { fill: var(--text-secondary); font-family: var(--ko); font-weight: 800; }
+.monthlab { fill: var(--text-muted); }
+.todayline { stroke: var(--text-primary); stroke-width: 1.5; stroke-dasharray: 3 3; }
+
+.foot { margin-top: clamp(2.4rem, 6vw, 3.6rem); border-top: 1px solid var(--border); padding: 1.2rem 0 2.4rem; }
+.foot p { margin: 0; font-size: .76rem; color: var(--text-muted); }
+
+@media (prefers-reduced-motion: reduce) { .card, .dot-now, .dot-new { transition: none; animation: none; } }
+[hidden] { display: none !important; }
+</style>
+
+<nav class="bar">
+  <div class="bar-in">
+    <b>Bloom</b>
+    <a href="/">아카이브</a>
+    <span class="sp"></span>
+    <button id="theme" type="button" aria-label="밝기 전환">밝기</button>
+  </div>
+</nav>
+
+<main class="wrap">
+  <header class="mast">
+    <h1>당신의 한 줄</h1>
+    <p class="dek">Bloom 회고 · 2026.08.06</p>
+    <p class="intro">오늘 조에서 나온 이야기 중 가져갈 한 줄을 적어 주세요. 26회 기록의 어느 갈래에 놓이는지 보여 드립니다.</p>
+  </header>
+
+  <section class="ask">
+    <label class="lbl" for="line">오늘 가져갈 한 줄</label>
+    <textarea id="line" maxlength="90" placeholder="예: AI가 초안을 내면 그다음이 진짜 일이더라"></textarea>
+    <div class="askfoot">
+      <button class="send" id="send" type="button">기록에 비춰보기</button>
+      <span class="count" id="count">0 / 80</span>
+      <span class="msg" id="msg" role="status"></span>
+    </div>
+  </section>
+
+  <section id="cardwrap" hidden></section>
+
+  <section id="boardsec">
+    <div class="shead">
+      <h2>오늘 이 방</h2>
+      <span class="note" id="boardnote">아직 아무도 적지 않았습니다.</span>
+    </div>
+    <div class="board" id="board"></div>
+  </section>
+
+  <footer class="foot">
+    <p>여기 적힌 줄은 오늘 이 방의 말이고, 26회 기록에는 섞이지 않습니다. 아카이브는 <a href="/">bloom-archive</a> 에 그대로 있습니다.</p>
+  </footer>
+</main>
+
+<div class="stage" id="stage">
+  <div class="head">
+    <div>
+      <h1>당신의 한 줄</h1>
+      <p class="sub" id="ssub">Bloom 회고 · 2026.08.06 — 오늘 가져갈 한 줄을 적어 주세요</p>
+      <p class="legend">
+        <span><i class="k past"></i>4개월 기록</span>
+        <span><i class="k now"></i>오늘 이 방</span>
+        <span><i class="k new"></i>기록에 없던 말</span>
+      </p>
+    </div>
+    <div class="joinq">
+      <!-- QR 은 빌드 때 SITE_URL 로 구워 넣는다. 런타임 인코더를 두지 않는 이유는 검증할 수 없어서다. -->
+      <div id="qr" role="img" aria-label="참여 QR 코드">/*__QR__*/</div>
+      <div class="u" id="qurl"></div>
+    </div>
+  </div>
+  <div class="plot"><svg id="cal" aria-label="4개월 기록의 다섯 갈래와 오늘 올라온 줄"></svg></div>
+  <div class="foot2">
+    <div class="tally" id="tally">0<i>명 참여</i></div>
+    <div class="nextup" id="nextup"></div>
+    <button class="ghost" id="copyops" type="button">운영진용 한 장 복사</button>
+  </div>
+</div>
+
+<script>
+const D = /*__DATA__*/;
+const LANES = /*__LINEAGE__*/;
+const API = { url: '__SB_URL__', key: '__SB_KEY__' };
+const SITE = '__SITE__';
+const ROOM = 'retro-0806';
+
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const SVGNS = 'http://www.w3.org/2000/svg';
+const sv = (tag, attrs) => { const n = document.createElementNS(SVGNS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); return n; };
+
+/* 실명 표기는 아카이브와 같은 규칙을 쓴다 — 성만 남긴다 */
+const KEEPNAME = new Set(['조코딩', '팔로알토', 'KEEPKWAN', 'Kyle', 'junshu', '빌더 조쉬', 'Celina', '까칠한AI', 'Bloom', 'Claude', 'Anthropic']);
+function maskOne(name) {
+  const n = name.trim();
+  if (!n || KEEPNAME.has(n)) return n;
+  if (/^[가-힣]{2,4}$/.test(n)) return n[0] + '○'.repeat(n.length - 1);
+  const parts = n.split(/\s+/);
+  if (parts.length > 1 && /^[A-Za-z][A-Za-z'-]*$/.test(parts[parts.length - 1])) return parts[parts.length - 1];
+  return n;
+}
+const NAMEMAP = (() => {
+  const names = new Set();
+  (D?.events || []).forEach(e => (e.speakers || []).forEach(s => names.add(s.n.replace(/\s*\([^)]*\)\s*/g, '').trim())));
+  (D?.people || []).forEach(p => names.add(p.n.replace(/\s*\([^)]*\)\s*/g, '').trim()));
+  return [...names].filter(Boolean).sort((a, b) => b.length - a.length).map(n => [n, maskOne(n)]);
+})();
+const mask = s => NAMEMAP.reduce((acc, [from, to]) => acc.split(from).join(to), String(s));
+const T = v => esc(mask(v));
+
+const laneOf = k => LANES.lanes.find(l => l.key === k);
+const md = d => d.slice(5).replace('-', '.');
+
+/* ── 갈래 판정 ── src/lineage.js 의 place() 와 같은 규칙 ── */
+function place(line) {
+  const s = String(line || '');
+  let best = null;
+  for (const lane of LANES.lanes) {
+    let score = 0;
+    for (const k of lane.kw) if (s.includes(k)) score += k.length;
+    if (score && (!best || score > best.score)) best = { key: lane.key, score };
+  }
+  return best ? best.key : 'new';
+}
+
+/* ── 서버 ── 아카이브와 같은 헬퍼 ── */
+const live = API.url.startsWith('http');
+async function rpc(fn, args) {
+  const r = await fetch(`${API.url}/rest/v1/rpc/${fn}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', apikey: API.key, Authorization: `Bearer ${API.key}` },
+    body: JSON.stringify(args),
+  });
+  if (!r.ok) throw new Error(await r.text());
+  const t = await r.text();
+  return t ? JSON.parse(t) : null;
+}
+const voterId = (() => {
+  try {
+    let v = localStorage.getItem('bloom-voter');
+    if (!v) { v = crypto.randomUUID(); localStorage.setItem('bloom-voter', v); }
+    return v;
+  } catch (e) { return crypto.randomUUID(); }
+})();
+
+let BOARD = [];
+let MINE = null;
+try { MINE = JSON.parse(localStorage.getItem('bloom-line') || 'null'); } catch (e) {}
+
+/* ── 카드 ── */
+function renderCard() {
+  const box = $('#cardwrap');
+  if (!MINE) { box.hidden = true; return; }
+  box.hidden = false;
+  const isNew = MINE.lane === 'new';
+  const lane = isNew ? null : laneOf(MINE.lane);
+  const same = BOARD.filter(r => r.lane === MINE.lane).length;
+  const past = lane ? lane.lines.length : 0;
+
+  const verdict = isNew
+    ? `<p class="verdict">26회 기록에 없던 말입니다.<b class="lane">이 갈래는 오늘 당신에게서 시작합니다.</b></p>`
+    : `<p class="verdict">4개월 동안 이어져 온 갈래입니다.<b class="lane">${esc(lane.label)}</b></p>
+       <ol>${lane.lines.map(l => `<li><span class="d">${esc(md(l.d))}</span><span>${T(l.t)}<span class="w">${T(l.w)}</span></span></li>`).join('')}</ol>`;
+
+  const rank = isNew
+    ? `<p class="rank">오늘 이 방에서 ${same}번째로 나온 새 갈래입니다.</p>`
+    : `<p class="rank">기록의 ${past}줄에 이어, 당신은 ${past + 1}번째입니다.</p>`;
+
+  box.innerHTML = `
+    <div class="card${isNew ? ' isnew' : ''}" id="card">
+      <div class="top"><span class="lbl">2026.08.06 · 나의 한 줄</span></div>
+      <p class="mine">${esc(MINE.line)}</p>
+      ${verdict}
+      ${rank}
+      <div class="fix">
+        <span class="lbl">갈래가 다르면 바꿔 주세요</span>
+        <div class="chips" id="fixchips">
+          ${LANES.lanes.map(l => `<button class="chip" type="button" data-lane="${l.key}" aria-pressed="${l.key === MINE.lane}">${esc(l.label)}</button>`).join('')}
+          <button class="chip" type="button" data-lane="new" aria-pressed="${isNew}">기록에 없던 말</button>
+        </div>
+      </div>
+      <div class="acts">
+        <button class="ghost" id="savecard" type="button">카드 이미지로 저장</button>
+        <button class="ghost" id="again" type="button">다시 쓰기</button>
+      </div>
+    </div>`;
+
+  $('#fixchips').addEventListener('click', async ev => {
+    const b = ev.target.closest('button[data-lane]');
+    if (!b || b.dataset.lane === MINE.lane) return;
+    MINE.lane = b.dataset.lane;
+    saveMine();
+    renderCard();
+    await put().catch(() => {});
+  });
+  $('#savecard').addEventListener('click', drawCardImage);
+  $('#again').addEventListener('click', () => { $('#line').value = MINE.line; $('#line').focus(); countUp(); });
+}
+
+const saveMine = () => { try { localStorage.setItem('bloom-line', JSON.stringify(MINE)); } catch (e) {} };
+
+async function put() {
+  if (!live || !MINE) return;
+  await rpc('bloom_line_put', { p_room: ROOM, p_voter: voterId, p_line: MINE.line, p_lane: MINE.lane });
+  await loadBoard();
+}
+
+/* ── 오늘 이 방 ── */
+function renderBoard() {
+  const el = $('#board');
+  const note = $('#boardnote');
+  if (!BOARD.length) {
+    el.innerHTML = '<p class="empty">아직 아무도 적지 않았습니다.</p>';
+    note.textContent = live ? '아직 아무도 적지 않았습니다.' : '연결되지 않아 이 방의 줄은 보이지 않습니다.';
+    return;
+  }
+  note.textContent = `${BOARD.length}줄`;
+  const groups = [...LANES.lanes.map(l => ({ key: l.key, label: l.label })), { key: 'new', label: '기록에 없던 말' }];
+  el.innerHTML = groups.map(g => {
+    const rows = BOARD.filter(r => r.lane === g.key);
+    if (!rows.length) return '';
+    return `<div class="lane-row${g.key === 'new' ? ' newlane' : ''}">
+      <div class="h"><b>${esc(g.label)}</b><span class="n">${rows.length}</span></div>
+      <ul>${rows.map(r => `<li>${esc(r.line)}</li>`).join('')}</ul>
+    </div>`;
+  }).join('') || '<p class="empty">아직 아무도 적지 않았습니다.</p>';
+}
+
+async function loadBoard() {
+  if (!live) return;
+  try {
+    BOARD = (await rpc('bloom_line_board', { p_room: ROOM })) || [];
+  } catch (e) { BOARD = BOARD || []; }
+  renderBoard();
+  if (!$('#cardwrap').hidden) renderCard();
+  if (document.body.classList.contains('screen')) drawStage();
+}
+
+/* ── 입력 ── */
+function countUp() {
+  const n = [...$('#line').value.trim()].length;
+  const c = $('#count');
+  c.textContent = `${n} / 80`;
+  c.classList.toggle('over', n > 80);
+}
+
+async function submit() {
+  const raw = $('#line').value.trim();
+  const msg = $('#msg');
+  msg.className = 'msg';
+  if ([...raw].length < 2) { msg.className = 'msg err'; msg.textContent = '두 글자 이상 적어 주세요.'; return; }
+  if ([...raw].length > 80) { msg.className = 'msg err'; msg.textContent = '80자 안으로 줄여 주세요.'; return; }
+  const btn = $('#send');
+  btn.disabled = true;
+  MINE = { line: raw, lane: place(raw) };
+  saveMine();
+  renderCard();
+  $('#card')?.scrollIntoView({ block: 'nearest' });
+  if (live) {
+    try { await put(); msg.textContent = '이 방에 올렸습니다.'; }
+    catch (e) { msg.className = 'msg err'; msg.textContent = '올리지 못했습니다. 카드는 그대로 보입니다.'; }
+  } else {
+    msg.textContent = '연결되지 않아 이 방에는 올리지 못했습니다. 카드는 그대로 저장하실 수 있습니다.';
+  }
+  btn.disabled = false;
+}
+
+/* ── 카드 이미지 ── 각자 가져가는 것 ── */
+async function drawCardImage() {
+  const W = 1080, H = 1350, P = 90;
+  const cv = document.createElement('canvas');
+  cv.width = W; cv.height = H;
+  const g = cv.getContext('2d');
+  const dark = document.documentElement.dataset.theme === 'dark';
+  const ink = dark ? '#ffffff' : '#0b0b0b';
+  const dim = dark ? '#93918a' : '#706e67';
+  const rule = dark ? '#33332f' : '#e4e3df';
+  g.fillStyle = dark ? '#1a1a19' : '#fcfcfb';
+  g.fillRect(0, 0, W, H);
+
+  const wrapText = (text, x, y, maxw, lh, font, color) => {
+    g.font = font; g.fillStyle = color;
+    let line = '', yy = y;
+    for (const ch of text) {
+      if (g.measureText(line + ch).width > maxw && line) { g.fillText(line, x, yy); line = ch; yy += lh; }
+      else line += ch;
+    }
+    if (line) { g.fillText(line, x, yy); yy += lh; }
+    return yy;
+  };
+
+  g.font = '600 26px Archivo, sans-serif'; g.fillStyle = dim;
+  g.fillText('2026.08.06 · BLOOM 회고', P, P + 26);
+
+  let y = P + 130;
+  y = wrapText(MINE.line, P, y, W - P * 2, 74, '800 58px "Gothic A1", sans-serif', ink);
+
+  y += 40;
+  g.strokeStyle = rule; g.lineWidth = 2;
+  g.beginPath(); g.moveTo(P, y); g.lineTo(W - P, y); g.stroke();
+  y += 60;
+
+  const isNew = MINE.lane === 'new';
+  const lane = isNew ? null : laneOf(MINE.lane);
+  if (isNew) {
+    y = wrapText('26회 기록에 없던 말입니다.', P, y, W - P * 2, 46, '600 32px "Gothic A1", sans-serif', dim);
+    y += 18;
+    y = wrapText('이 갈래는 오늘 당신에게서 시작합니다.', P, y, W - P * 2, 56, '800 42px "Gothic A1", sans-serif', dark ? '#ef8b5e' : '#b34a12');
+  } else {
+    y = wrapText('4개월 동안 이어져 온 갈래입니다.', P, y, W - P * 2, 46, '600 32px "Gothic A1", sans-serif', dim);
+    y += 18;
+    y = wrapText(lane.label, P, y, W - P * 2, 56, '800 42px "Gothic A1", sans-serif', ink);
+    y += 44;
+    for (const l of lane.lines.slice(0, 4)) {
+      g.font = '700 26px Archivo, sans-serif'; g.fillStyle = dim;
+      g.fillText(md(l.d), P, y);
+      y = wrapText(mask(l.t), P + 110, y, W - P * 2 - 110, 40, '500 27px sans-serif', dim) + 20;
+    }
+    y += 10;
+    y = wrapText(`기록의 ${lane.lines.length}줄에 이어, 당신은 ${lane.lines.length + 1}번째입니다.`,
+      P, y, W - P * 2, 50, '800 36px "Gothic A1", sans-serif', ink);
+  }
+
+  g.font = '600 24px Archivo, sans-serif'; g.fillStyle = dim;
+  g.fillText(SITE ? SITE.replace(/^https?:\/\//, '') : 'bloom-archive', P, H - P);
+
+  await new Promise(res => cv.toBlob(b => {
+    if (!b) return res();
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(b);
+    a.download = 'bloom-my-line-20260806.png';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    res();
+  }, 'image/png'));
+}
+
+/* ── 발표자 화면 ── 아카이브와 같은 시간축 ── */
+const DAY = 864e5;
+const GRID0 = Date.parse('2026-04-13');
+const TODAY = '2026-08-06';
+const WEEKS = 18;
+
+function drawStage() {
+  const svg = $('#cal');
+  const box = svg.parentElement;
+  svg.textContent = '';
+  const W = box.clientWidth || 1200;
+  const rows = LANES.lanes.length + 1;                       // 다섯 갈래 + 기록에 없던 말
+  const LEFT = Math.min(320, Math.max(150, W * 0.2)), RIGHT = 24, TOP = 34;
+  /* 트랙 높이는 남은 세로 공간에서 되돌려 푼다. 머리(QR)와 발치(집계)가 잘리면 안 된다. */
+  const avail = (box.clientHeight || window.innerHeight * 0.5) - TOP - 18;
+  const rowH = Math.max(44, Math.min(120, avail / rows));
+  const H = TOP + rowH * rows + 18;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.setAttribute('height', H);
+
+  const x = d => LEFT + ((Date.parse(d) - GRID0) / DAY / 7 / WEEKS) * (W - LEFT - RIGHT);
+  const yOf = i => TOP + rowH * i + rowH / 2;
+
+  for (const [m, lab] of [['2026-04-13', '4월'], ['2026-05-04', '5월'], ['2026-06-01', '6월'], ['2026-07-06', '7월'], ['2026-08-03', '8월']]) {
+    const t = sv('text', { x: x(m), y: 20, 'font-size': 13, 'font-weight': 700, class: 'monthlab' });
+    t.textContent = lab; svg.appendChild(t);
+  }
+
+  const groups = [...LANES.lanes, { key: 'new', label: '기록에 없던 말', lines: [] }];
+  groups.forEach((lane, i) => {
+    const y = yOf(i);
+    svg.appendChild(sv('line', { x1: LEFT, y1: y, x2: W - RIGHT, y2: y, class: 'trackline' }));
+    const lab = sv('text', { x: 0, y: y + 5, 'font-size': Math.min(19, Math.max(12, rowH * 0.26)), class: 'tracklab' });
+    lab.textContent = lane.label;
+    svg.appendChild(lab);
+    for (const l of lane.lines) svg.appendChild(sv('circle', { cx: x(l.d), cy: y, r: 4.5, class: 'dot-past' }));
+  });
+
+  const tx = x(TODAY);
+  svg.appendChild(sv('line', { x1: tx, y1: TOP - 6, x2: tx, y2: TOP + rowH * rows, class: 'todayline' }));
+
+  const per = {};
+  for (const r of BOARD) {
+    const i = groups.findIndex(g => g.key === r.lane);
+    if (i < 0) continue;
+    per[i] = (per[i] || 0) + 1;
+    const k = per[i] - 1;
+    const cx = tx + (k % 6) * 13 - 32;
+    const cy = yOf(i) - Math.floor(k / 6) * 13 - 14;
+    svg.appendChild(sv('circle', { cx, cy, r: 5.5, class: r.lane === 'new' ? 'dot-new' : 'dot-now' }));
+  }
+
+  $('#tally').innerHTML = `${BOARD.length}<i>명 참여</i>`;
+  const up = (D?.upcoming || [])[0];
+  $('#nextup').textContent = up ? `다음 칸은 ${md(up.date)} — ${mask(up.title)}` : '';
+}
+
+/* ── 운영진이 가져가는 것 ── 같은 입력에서 나온다. 줄만 남고 사람은 남지 않는다 ── */
+function opsSheet() {
+  const groups = [...LANES.lanes.map(l => ({ key: l.key, label: l.label, past: l.lines.length })),
+    { key: 'new', label: '기록에 없던 말', past: 0 }];
+  const rows = groups.map(g => ({ ...g, n: BOARD.filter(r => r.lane === g.key).length }))
+    .filter(g => g.n).sort((a, b) => b.n - a.n);
+  const news = BOARD.filter(r => r.lane === 'new');
+  /* 자릿수를 맞추지 않는다 — 한글은 폭이 제각각이라 어디에 붙여 넣어도 어긋난다 */
+  return [
+    `Bloom 회고 2026.08.06 · 참여 ${BOARD.length}명`,
+    '',
+    '갈래별 (오늘 / 4개월 기록)',
+    ...rows.map(r => `  ${r.n}줄 — ${r.label}${r.past ? ` (기록 ${r.past}줄)` : ''}`),
+    '',
+    news.length ? `26회 기록에 없던 말 ${news.length}건` : '26회 기록에 없던 말: 없음',
+    ...news.map(r => `  · ${r.line}`),
+    '',
+    '갈래 판정은 낱말 규칙이고 본인이 고칠 수 있게 열어 뒀습니다. 참고용입니다.',
+  ].join('\n');
+}
+
+/* ── 시작 ── */
+$('#copyops').addEventListener('click', async ev => {
+  const text = opsSheet();
+  try { await navigator.clipboard.writeText(text); ev.target.textContent = '복사했습니다'; }
+  catch (e) {
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); ev.target.textContent = '복사했습니다'; }
+    catch (e2) { ev.target.textContent = '복사 실패'; }
+    ta.remove();
+  }
+  setTimeout(() => { ev.target.textContent = '운영진용 한 장 복사'; }, 2200);
+});
+
+$('#theme').addEventListener('click', () => {
+  const d = document.documentElement;
+  d.dataset.theme = d.dataset.theme === 'dark' ? 'light' : 'dark';
+  try { localStorage.setItem('bloom-theme', d.dataset.theme); } catch (e) {}
+  if (document.body.classList.contains('screen')) drawStage();
+});
+$('#send').addEventListener('click', submit);
+$('#line').addEventListener('input', countUp);
+$('#line').addEventListener('keydown', ev => { if ((ev.metaKey || ev.ctrlKey) && ev.key === 'Enter') submit(); });
+
+if (new URLSearchParams(location.search).has('screen')) {
+  document.body.classList.add('screen');
+  const url = (SITE || location.origin) + '/line';
+  $('#qurl').textContent = url.replace(/^https?:\/\//, '');
+  if (!$('#qr').firstElementChild) $('#qr').style.display = 'none';   // SITE_URL 없이 빌드된 경우
+  addEventListener('resize', () => drawStage());
+  drawStage();
+  if (live) setInterval(loadBoard, 2500);
+}
+
+countUp();
+renderCard();
+renderBoard();
+if (live) loadBoard();
+else $('#msg').textContent = '';
+window.__LANES = LANES;
+</script>
