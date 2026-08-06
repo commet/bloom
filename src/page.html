@@ -14,8 +14,8 @@ no editorial voice.
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review,
 the verdict, and DESIGN.md.
 -->
-<title>Bloom 2026 · 4–8월 기록</title>
-<meta name="description" content="Bloom 커뮤니티 2026년 4~8월 행사 26회의 기록. 날짜·장소·연사·조별 정리·인용을 한 페이지에 모았다.">
+<title>Bloom 2026 · 4–8월 활동 기록</title>
+<meta name="description" content="Bloom 커뮤니티의 2026년 4~8월 활동 기록. 행사 26회의 일정·장소·연사·조별 정리·발언을 한 페이지에 정리했습니다.">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script>
 (function () {
@@ -27,7 +27,7 @@ the verdict, and DESIGN.md.
     m.content = 'width=device-width, initial-scale=1, viewport-fit=cover';
     h.appendChild(m);
   }
-  if (!d.title) d.title = 'Bloom 2026 · 4–8월 기록';
+  if (!d.title) d.title = 'Bloom 2026 · 4–8월 활동 기록';
   try { d.documentElement.dataset.theme = localStorage.getItem('bloom-theme') || 'light'; }
   catch (e) { d.documentElement.dataset.theme = 'light'; }
 })();
@@ -169,6 +169,7 @@ section { padding-top: clamp(2.4rem, 6vw, 4rem); scroll-margin-top: 52px; }
 #cal .cell { cursor: pointer; transition: opacity .12s; }
 #cal .cell:hover, #cal .cell:focus-visible { opacity: .72; }
 #cal .today { stroke: var(--text-primary); stroke-width: 1.5; fill: none; }
+#cal .en { fill: var(--surface-1); pointer-events: none; }
 #cal .mv { fill: var(--text-primary); font-size: 11px; font-weight: 700; }
 #cal .mb { fill: var(--border-strong); }
 #cal .mb.hot { fill: var(--text-primary); }
@@ -363,14 +364,14 @@ details.method[open] > summary::after { rotate: -135deg; }
 <nav class="bar" aria-label="섹션">
   <div class="bar-in">
     <b>BLOOM</b>
-    <a href="#plot">달력</a>
-    <a href="#firsts">처음</a>
-    <a href="#words">내용</a>
-    <a href="#numbers">숫자</a>
-    <a href="#next">다음</a>
-    <a href="#method">기록</a>
+    <a href="#plot">개최 현황</a>
+    <a href="#firsts">주요 이력</a>
+    <a href="#words">발언 기록</a>
+    <a href="#numbers">통계</a>
+    <a href="#next">예정</a>
+    <a href="#method">자료 기준</a>
     <span class="sp"></span>
-    <button type="button" id="theme">밝기</button>
+    <button type="button" id="theme">테마</button>
   </div>
 </nav>
 
@@ -378,9 +379,9 @@ details.method[open] > summary::after { rotate: -135deg; }
   <h1>Bloom 2026</h1>
   <p class="dek" id="dek"></p>
   <p class="intro">
-    커뮤니티 공지·후기와 운영진 글에 남은 기록을 한 페이지로 모았습니다.
-    아래 달력의 칸
-    하나가 행사 한 번이고, 누르면 그날의 연사·조별 정리·인용·링크가 열립니다.
+    커뮤니티 공지와 후기, 운영진 게시글에 남은 기록을 한 페이지로 정리했습니다.
+    아래 달력의 각 칸은 개별 행사를 나타내며, 선택하면 해당 회차의 연사·조별 정리·발언·원문 링크를
+    확인할 수 있습니다.
   </p>
   <p class="disc" id="disc"></p>
   <div class="facts" id="facts"></div>
@@ -392,8 +393,8 @@ details.method[open] > summary::after { rotate: -135deg; }
     <div class="herogrid">
       <div class="heroleft">
     <div class="shead">
-      <h2 id="plottitle">행사</h2>
-      <span class="note">가로 한 칸이 한 주, 세로가 요일. 4월 13일부터 18주.</span>
+      <h2>개최 현황</h2>
+      <span class="note" id="plotnote"></span>
     </div>
     <div class="plotbox" id="plotbox">
       <svg id="cal" role="img" aria-label="2026년 4월 13일부터 8월 16일까지 18주 동안 열린 행사 26회를 요일별로 배치한 달력. 오른쪽은 요일별 합계."></svg>
@@ -403,9 +404,9 @@ details.method[open] > summary::after { rotate: -135deg; }
       </div>
       <div class="heroright" id="firsts">
         <div class="shead">
-          <h2>처음 있었던 일</h2>
+          <h2>주요 이력</h2>
         </div>
-        <p class="note" style="margin:-.5rem 0 .6rem;font-size:.8rem;color:var(--text-muted)">기록에 “처음”·“도입”으로 적힌 것만 날짜순으로. 누르면 그날 기록이 열립니다.</p>
+        <p class="note" style="margin:-.5rem 0 .6rem;font-size:.8rem;color:var(--text-muted)">기록에 ‘최초’ 또는 ‘도입’으로 명시된 항목만 날짜순으로 정리했습니다. 선택하면 해당 회차 기록이 열립니다.</p>
         <div class="firsts" id="firstlist"></div>
       </div>
     </div>
@@ -413,37 +414,37 @@ details.method[open] > summary::after { rotate: -135deg; }
 
   <section id="words">
     <div class="shead">
-      <h2>그날 나온 말</h2>
-      <span class="note">전부 기록에 남은 원문입니다.</span>
+      <h2>발언 기록</h2>
+      <span class="note">모두 원문 그대로 인용했습니다.</span>
     </div>
     <div class="ctrl">
       <div class="seg" id="seg" role="group" aria-label="보기">
-        <button type="button" data-view="quote" aria-pressed="true">인용<em id="cq"></em></button>
-        <button type="button" data-view="table" aria-pressed="false">조별 정리<em id="ct"></em></button>
+        <button type="button" data-view="quote" aria-pressed="true">발언<em id="cq"></em></button>
+        <button type="button" data-view="table" aria-pressed="false">조별 토론<em id="ct"></em></button>
       </div>
       <div class="chips" id="topics" role="group" aria-label="주제"></div>
     </div>
     <div class="wall" id="wall"></div>
-    <p class="empty" id="wempty" hidden>해당하는 기록이 없습니다.</p>
+    <p class="empty" id="wempty" hidden>해당 조건에 맞는 기록이 없습니다.</p>
     <button type="button" class="more" id="more" hidden></button>
   </section>
 
   <section id="numbers">
     <div class="shead">
-      <h2>숫자</h2>
-      <span class="note">수치가 공개된 것만 그렸습니다.</span>
+      <h2>통계</h2>
+      <span class="note">공개된 수치만 반영했습니다.</span>
     </div>
     <div class="charts" id="charts"></div>
   </section>
 
   <section id="next">
-    <div class="shead"><h2>다음</h2></div>
+    <div class="shead"><h2>예정 일정</h2></div>
     <div class="next" id="nextlist"></div>
   </section>
 
   <section id="method">
     <details class="method">
-      <summary>기록 기준과 검증</summary>
+      <summary>자료 출처와 검증</summary>
       <div class="mgrid" id="mgrid"></div>
     </details>
   </section>
@@ -480,9 +481,9 @@ const CHK = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1.5 6.3 4.4 9
 
 /* 형식은 세 갈래로 묶는다 — 색맹 검증을 통과한 3색 안에서 쓰기 위해 */
 const GROUP = { talk: 0, roundtable: 1, party: 2, walk: 2, network: 2, private: 2 };
-const GNAME = ['강연 중심', '라운드테이블', '그 외 (파티·산책·네트워킹·비공개)'];
+const GNAME = ['강연', '라운드테이블', '기타 (파티·워크·네트워킹·비공개)'];
 const GVAR = ['--s2', '--s1', '--s3'];
-const KIND = { talk: '강연', roundtable: '라운드테이블', party: '파티', walk: '산책', network: '네트워킹', private: '비공개' };
+const KIND = { talk: '강연', roundtable: '라운드테이블', party: '파티', walk: '워크', network: '네트워킹', private: '비공개' };
 const LANG = { ko: '한국어', en: '영어', mixed: '한/영' };
 
 const E = D.events;
@@ -495,16 +496,17 @@ const held = E.filter(e => !e.upcoming).length;
 const speakers = new Set();
 E.forEach(e => (e.speakers || []).forEach(s => speakers.add(s.n)));
 
-$('#dek').textContent = `2026.04.14 – 08.06 · ${held}회 · 서울과 싱가포르 · 예정 1건`;
+$('#dek').textContent = `2026.04.14 – 08.06 · 개최 ${held}회 · 서울·싱가포르 · 예정 ${E.length - held}회`;
 $('#disc').textContent =
-  '참석자 한 사람이 공개된 기록을 모아 정리한 페이지입니다. Bloom 공식 자료가 아니며, 원문에 없는 평가나 해석은 넣지 않았습니다.';
-$('#plottitle').textContent = `${E.length}회`;
+  '참석자 개인이 공개 기록을 정리한 비공식 자료입니다. Bloom의 공식 발표가 아니며, 원문에 없는 평가나 해석은 포함하지 않았습니다.';
+$('#plotnote').textContent =
+  `총 ${E.length}회. 가로축 한 칸이 1주, 세로축이 요일이며 2026년 4월 13일부터 18주간입니다.`;
 
 $('#facts').innerHTML = [
-  ['7,100', '명', '유니크 신청자'],
-  ['2,800', '명', '디스코드 멤버'],
-  ['18', '곳 이상', '공간을 빌려준 곳'],
-  [String(speakers.size), '명', '기록에 이름이 남은 연사'],
+  ['7,100', '명', '누적 신청자 (중복 제외)'],
+  ['2,800', '명', '디스코드 가입자'],
+  ['18', '곳 이상', '장소 후원 기관'],
+  [String(speakers.size), '명', '확인된 연사'],
 ].map(([v, u, k]) => `<div><b>${v}<i>${u}</i></b><span>${k}</span></div>`).join('');
 
 /* ── 달력 ─────────────────────────────────────────────── */
@@ -572,6 +574,9 @@ function drawCalendar() {
       });
       rect.dataset.id = e.id;
       svg.append(rect);
+      if (e.lang === 'en') svg.append(sv('circle', {
+        class: 'en', cx: cx(c) + cell - 5.5, cy: cy(r) + 5.5, r: 2.4,
+      }));
       if (e.today) svg.append(sv('rect', {
         class: 'today', x: cx(c) - 3, y: cy(r) - 3, width: cell + 6, height: cell + 6, rx: Math.min(6, cell / 4),
       }));
@@ -581,7 +586,7 @@ function drawCalendar() {
   /* 요일별 합계 — 세로축을 공유하는 주변 분포 */
   const mx = LEFT + gridW + 22, mw = MARG - 40;
   const cap = sv('text', { class: 'cap', x: mx, y: TOP - 9 });
-  cap.textContent = '요일별';
+  cap.textContent = '요일 합계';
   svg.append(cap);
   dowCount.forEach((n, r) => {
     if (!n) return;
@@ -623,8 +628,9 @@ function bindCells(svg) {
 $('#legend').innerHTML = GNAME.map((n, i) =>
   `<span><i style="background:var(${GVAR[i]})"></i>${esc(n)} <em>${E.filter(e => gOf(e) === i).length}</em></span>`).join('')
   + `<span><i class="ring"></i>예정</span>`
-  + `<span><i style="width:4px;height:4px;border-radius:1px;background:var(--border)"></i>행사 없는 날</span>`
-  + `<span class="hint">칸을 누르면 그날 기록이 열립니다</span>`;
+  + `<span><i style="width:4px;height:4px;border-radius:1px;background:var(--border)"></i>행사 없음</span>`
+  + `<span><i style="background:var(--text-secondary);position:relative"><b style="position:absolute;right:1px;top:1px;width:3px;height:3px;border-radius:50%;background:var(--surface-1)"></b></i>영어 진행 <em>${E.filter(e => e.lang === 'en').length}</em></span>`
+  + `<span class="hint">칸을 선택하면 해당 회차 기록이 열립니다</span>`;
 
 drawCalendar();
 let rz;
@@ -666,7 +672,7 @@ function renderWall() {
   const rest = all.length - list.length;
   const more = $('#more');
   more.hidden = rest <= 0;
-  more.textContent = `${rest}개 더 보기`;
+  more.textContent = `${rest}건 더 보기`;
   $('#wall').innerHTML = list.map(item => {
     const e = item.e;
     const body = view === 'quote'
@@ -747,17 +753,17 @@ function growthChart() {
       <text class="v" x="${px(p)}" y="${py(p) - 12}" text-anchor="${anc}">${p.n.toLocaleString()}</text>
       <text class="m" x="${px(p)}" y="${h - 6}" text-anchor="${anc}">${p.d.slice(5)}</text>`;
   }).join('');
-  return `<div class="chart"><h3>디스코드 멤버</h3><p class="cap">수치가 공개된 3개 시점.</p>
-    <svg viewBox="0 0 ${w} ${h}" role="img" aria-label="디스코드 멤버 수 추이">
+  return `<div class="chart"><h3>디스코드 가입자</h3><p class="cap">가입자 수가 공개된 3개 시점.</p>
+    <svg viewBox="0 0 ${w} ${h}" role="img" aria-label="디스코드 가입자 수 추이">
       <line class="gl" x1="${L}" x2="${w - R}" y1="${h - B}" y2="${h - B}"/>
       <path d="${line}" fill="none" stroke="var(--s1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       ${marks}</svg></div>`;
 }
 
 $('#charts').innerHTML =
-  barChart('다시 찾은 공간', '같은 곳에서 두 번 이상 열린 회차. 운영 주체 기준.', repeats, '회')
-  + barChart('참석 인원', `기록에 참석 수가 남은 ${attend.length}회.`, attend, '명')
-  + barChart('신청 인원', `기록에 신청 수가 남은 ${apply.length}회.`, apply, '명')
+  barChart('장소별 개최 횟수', '2회 이상 사용된 장소. 운영 주체 기준.', repeats, '회')
+  + barChart('참석 인원', `참석 인원이 공개된 ${attend.length}회.`, attend, '명')
+  + barChart('신청 인원', `신청 인원이 공개된 ${apply.length}회.`, apply, '명')
   + growthChart();
 
 /* ── 다음 ────────────────────────────────────────────── */
@@ -774,17 +780,17 @@ $('#nextlist').innerHTML = D.upcoming.map(u => `<article>
 
 /* ── 기록 기준 ───────────────────────────────────────── */
 $('#mgrid').innerHTML = `
-  <div><span class="lbl">무엇을 담고 뺐나</span><ul>${D.verification.policy.map(p => `<li>${esc(p)}</li>`).join('')}</ul></div>
-  <div><span class="lbl">따로 확인한 것</span><ul>${D.verification.checked.map(c =>
+  <div><span class="lbl">수록 기준</span><ul>${D.verification.policy.map(p => `<li>${esc(p)}</li>`).join('')}</ul></div>
+  <div><span class="lbl">교차 검증 완료</span><ul>${D.verification.checked.map(c =>
     `<li${c.warn ? ' class="warn"' : ''}><b>${esc(c.c)}</b> — ${esc(c.r)}</li>`).join('')}</ul></div>
-  <div><span class="lbl">확인하지 못한 것</span><ul>${D.verification.unresolved.map(u => `<li>${esc(u)}</li>`).join('')}</ul>
-    <span class="lbl" style="display:block;margin-top:1.1rem">원본 아카이브가 정리한 반복 테마</span>
+  <div><span class="lbl">검증 미완료</span><ul>${D.verification.unresolved.map(u => `<li>${esc(u)}</li>`).join('')}</ul>
+    <span class="lbl" style="display:block;margin-top:1.1rem">원본 아카이브의 반복 테마 정리</span>
     <ul>${D.themes.map(t => `<li>${esc(t.h)}</li>`).join('')}</ul></div>`;
 
 $('#channels').innerHTML = D.channels.map(c =>
   `<a href="${esc(c.u)}" target="_blank" rel="noopener noreferrer">${esc(c.l)} ${EXT}</a>`).join('');
 $('#footnote').textContent =
-  `출처: ${D.meta.source}. 수집 시점 ${D.meta.collectedAt}. 참석자 실명은 싣지 않았고, 조별 기록의 화자는 직군·소속으로만 적었습니다.`;
+  `출처: ${D.meta.source}. 수집 시점 ${D.meta.collectedAt}. 참석자 실명은 표기하지 않았으며, 조별 기록의 발언자는 직군과 소속으로만 표기했습니다.`;
 
 /* ── 드로어 ──────────────────────────────────────────── */
 const drawer = $('#drawer'), scrim = $('#scrim'), dbody = $('#dbody');
@@ -802,7 +808,7 @@ function detail(e) {
   if (e.sponsors && e.sponsors.length) rows.push(['후원', e.sponsors.map(esc).join(' · ')]);
   rows.push(['규모', scale.length ? scale.join(' · ') : '<span style="color:var(--text-muted)">공개되지 않음</span>']);
   if (e.format) rows.push(['포맷', esc(e.format)]);
-  rows.push(['분류', `${KIND[e.kind]} · ${LANG[e.lang]}${e.paid ? ' · 유료' : ''}`]);
+  rows.push(['구분', `${KIND[e.kind]} · ${LANG[e.lang]}${e.paid ? ' · 유료' : ''}`]);
   h += `<dl>${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>`;
 
   if (e.firsts && e.firsts.length) {
@@ -826,7 +832,7 @@ function detail(e) {
   (e.quotes || []).forEach(q => { h += `<blockquote><p>${esc(q.t)}</p><cite>${esc(q.s)}</cite></blockquote>`; });
 
   if (e.tables && e.tables.length) {
-    h += `<h4>조별 기록</h4>`;
+    h += `<h4>조별 토론 정리</h4>`;
     e.tables.forEach(t => { h += `<div class="grp"><b>${esc(t.who)}</b><ul>${t.pts.map(p => `<li>${esc(p)}</li>`).join('')}</ul></div>`; });
   }
   if (e.retro) {
@@ -836,10 +842,10 @@ function detail(e) {
     h += `</div>`;
   }
   if (e.feedback && e.feedback.length) {
-    h += `<div class="box"><span class="lbl">현장 피드백</span>${e.feedback.map(f => `<p>${esc(f)}</p>`).join('')}</div>`;
+    h += `<div class="box"><span class="lbl">참석자 피드백</span>${e.feedback.map(f => `<p>${esc(f)}</p>`).join('')}</div>`;
   }
   if (e.actions && e.actions.length) {
-    h += `<div class="grp"><b>운영진 즉시 반영</b><ul>${e.actions.map(a => `<li>${esc(a)}</li>`).join('')}</ul></div>`;
+    h += `<div class="grp"><b>운영진 후속 조치</b><ul>${e.actions.map(a => `<li>${esc(a)}</li>`).join('')}</ul></div>`;
   }
   if (e.note) h += `<p class="note">${esc(e.note)}</p>`;
   if (e.links && e.links.length) {
