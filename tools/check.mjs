@@ -1,63 +1,110 @@
-/** 기능·대비 점검 */
+/** 대비(WCAG AA)와 상호작용 점검. 실패만 출력한다. */
 import { chromium } from 'playwright';
 import { pathToFileURL } from 'node:url';
 import { resolve } from 'node:path';
-const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
-const out = [];
-for (const scheme of ['dark', 'light']) {
-  const ctx = await b.newContext({ viewport: { width: 1280, height: 900 }, colorScheme: scheme });
-  const p = await ctx.newPage();
-  await p.goto(pathToFileURL(resolve('dist/index.html')).href);
 
-  // 대비 검사
-  const lum = c => { const [r,g,b]=c.match(/\d+(\.\d+)?/g).map(Number).slice(0,3).map(v=>v/255)
-    .map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4); return .2126*r+.7152*g+.0722*b; };
-  const pairs = await p.evaluate(() => {
-    const seen = new Map();
-    /* 반투명 배경은 아래 레이어와 합성해서 실제 픽셀 색을 구한다 */
-    const parse = c => { const m = c.match(/[\d.]+/g).map(Number); return m.length > 3 && !c.startsWith('color(') ? m : (c.startsWith('color(') ? [m[0]*255, m[1]*255, m[2]*255, m[3] ?? 1] : [...m, 1]); };
+const url = pathToFileURL(resolve('dist/index.html')).href;
+const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
+const out = [];
+
+const lum = c => {
+  const [r, g, b] = c.match(/[\d.]+/g).slice(0, 3).map(Number).map(v => v / 255)
+    .map(v => (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+};
+
+for (const theme of ['light', 'dark']) {
+  const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  const page = await ctx.newPage();
+  page.on('pageerror', e => out.push(`${theme} JS 오류: ${e.message}`));
+  page.on('console', m => m.type() === 'error' && out.push(`${theme} 콘솔 오류: ${m.text()}`));
+  await page.goto(url);
+  await page.evaluate(t => { document.documentElement.dataset.theme = t; }, theme);
+  await page.evaluate(() => document.querySelector('#more')?.click());
+  await page.waitForTimeout(300);
+
+  /* ── 대비 ── 반투명 배경은 아래 레이어와 합성한 뒤 계산한다 */
+  const pairs = await page.evaluate(() => {
+    const parse = c => {
+      const m = (c.match(/[\d.]+/g) || []).map(Number);
+      if (c.startsWith('color(')) return [m[0] * 255, m[1] * 255, m[2] * 255, m[3] ?? 1];
+      return [m[0], m[1], m[2], m[3] ?? 1];
+    };
     const bgOf = n => {
-      let e = n, stack = [];
-      while (e) { const p = parse(getComputedStyle(e).backgroundColor); if (p[3] > 0) { stack.push(p); if (p[3] >= 1) break; } e = e.parentElement; }
+      let e = n; const stack = [];
+      while (e) {
+        const p = parse(getComputedStyle(e).backgroundColor);
+        if (p[3] > 0) { stack.push(p); if (p[3] >= 1) break; }
+        e = e.parentElement;
+      }
       if (!stack.length) return 'rgb(255,255,255)';
       let base = stack.pop();
-      while (stack.length) { const top = stack.pop(), a = top[3];
-        base = [0,1,2].map(i => top[i]*a + base[i]*(1-a)).concat(1); }
-      return `rgb(${base.slice(0,3).map(Math.round).join(', ')})`;
+      while (stack.length) {
+        const top = stack.pop(), a = top[3];
+        base = [0, 1, 2].map(i => top[i] * a + base[i] * (1 - a)).concat(1);
+      }
+      return `rgb(${base.slice(0, 3).map(Math.round).join(', ')})`;
     };
-    document.querySelectorAll('p,li,td,th,span,a,b,cite,dd,dt,h1,h2,h3,h4,h5,button').forEach(n => {
-      if (!n.textContent.trim() || n.children.length) return;
-      const cs = getComputedStyle(n);
-      const key = cs.color + '|' + bgOf(n) + '|' + cs.fontSize + '|' + cs.fontWeight;
-      if (!seen.has(key)) seen.set(key, { fg: cs.color, bg: bgOf(n), size: parseFloat(cs.fontSize), weight: +cs.fontWeight, sample: n.textContent.trim().slice(0,24) });
-    });
+    const seen = new Map();
+    document.querySelectorAll('p,li,td,th,span,a,b,i,em,cite,dd,dt,h1,h2,h3,h4,h5,button,q,summary,text')
+      .forEach(n => {
+        if (!n.textContent.trim() || n.children.length) return;
+        const r = n.getBoundingClientRect();
+        if (!r.width || !r.height) return;
+        const cs = getComputedStyle(n);
+        const fill = n.namespaceURI.includes('svg') ? cs.fill : cs.color;
+        if (!fill || fill === 'none') return;
+        const key = `${fill}|${bgOf(n)}|${cs.fontSize}|${cs.fontWeight}`;
+        if (!seen.has(key)) seen.set(key, {
+          fg: fill, bg: bgOf(n), size: parseFloat(cs.fontSize),
+          weight: +cs.fontWeight, sample: n.textContent.trim().slice(0, 26),
+        });
+      });
     return [...seen.values()];
   });
+
   for (const x of pairs) {
+    if (!/^(rgb|color)/.test(x.fg)) continue;
     const L1 = lum(x.fg), L2 = lum(x.bg);
-    const ratio = (Math.max(L1,L2)+.05)/(Math.min(L1,L2)+.05);
+    const ratio = (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05);
     const large = x.size >= 24 || (x.size >= 18.66 && x.weight >= 700);
     const min = large ? 3 : 4.5;
-    if (ratio < min) out.push(`${scheme} 대비 ${ratio.toFixed(2)} (필요 ${min}) ${x.size}px/${x.weight} "${x.sample}" ${x.fg} on ${x.bg}`);
+    if (ratio < min) out.push(`${theme} 대비 ${ratio.toFixed(2)} (필요 ${min}) ${x.size}px/${x.weight} "${x.sample}" ${x.fg} on ${x.bg}`);
   }
 
-  // 기능
-  await p.fill('#q', '팔로알토'); await p.waitForTimeout(250);
-  const n1 = await p.locator('.row:not([hidden])').count();
-  if (n1 !== 1) out.push(`${scheme} 검색 결과 ${n1}건 (1 기대)`);
-  await p.click('#reset'); await p.waitForTimeout(250);
-  const n2 = await p.locator('.row:not([hidden])').count();
-  if (n2 !== 26) out.push(`${scheme} 초기화 후 ${n2}건 (26 기대)`);
-  await p.click('#f-flag button:first-child'); await p.waitForTimeout(200);
-  const n3 = await p.locator('.row:not([hidden])').count();
-  if (n3 !== 2) out.push(`${scheme} 공개 회고 필터 ${n3}건 (2 기대)`);
-  await p.click('#reset'); await p.waitForTimeout(200);
-  await p.click('#e0625 .rowbtn'); await p.waitForTimeout(500);
-  await p.click('#e0625 button.tag'); await p.waitForTimeout(300);
-  const n4 = await p.locator('.row:not([hidden])').count();
-  if (n4 < 1) out.push(`${scheme} 태그 클릭 후 ${n4}건`);
-  else out.push(`${scheme} 태그 필터 동작 확인 (${n4}건)`);
+  /* ── 상호작용 ── */
+  const cells = await page.locator('#cal .cell').count();
+  if (cells !== 26) out.push(`${theme} 달력 칸 ${cells}개 (26 기대)`);
+
+  await page.locator('#cal .cell[data-id="0425"]').click();
+  await page.waitForTimeout(500);
+  if (!(await page.locator('#drawer.on').count())) out.push(`${theme} 달력 칸 클릭에 드로어가 열리지 않음`);
+  if (!(await page.locator('#dtitle').textContent()).includes('AB180')) out.push(`${theme} 드로어 제목이 다름`);
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(450);
+  if (await page.locator('#drawer.on').count()) out.push(`${theme} Esc로 드로어가 닫히지 않음`);
+
+  await page.locator('#firstlist button').first().click();
+  await page.waitForTimeout(500);
+  if (!(await page.locator('#drawer.on').count())) out.push(`${theme} 이정표 클릭에 드로어가 열리지 않음`);
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(450);
+
+  const q0 = await page.locator('#wall .card').count();
+  await page.locator('#seg button[data-view="table"]').click();
+  await page.waitForTimeout(250);
+  const t0 = await page.locator('#wall .card').count();
+  if (!q0 || !t0) out.push(`${theme} 카드가 비었음 (인용 ${q0}, 조별 ${t0})`);
+
+  await page.locator('#seg button[data-view="quote"]').click();
+  await page.waitForTimeout(200);
+  await page.locator('#topics .chip').first().click();
+  await page.waitForTimeout(250);
+  const filtered = await page.locator('#wall .card').count();
+  if (filtered === 0 || filtered > q0) out.push(`${theme} 주제 필터 결과 ${filtered}건 (0 < n <= ${q0} 기대)`);
+
   await ctx.close();
 }
-await b.close();
+
+await browser.close();
 console.log(out.length ? out.join('\n') : '모두 통과');

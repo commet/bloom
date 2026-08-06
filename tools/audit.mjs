@@ -6,14 +6,16 @@ for (const w of [390, 768, 1440]) {
   const ctx = await b.newContext({ viewport: { width: w, height: 900 } });
   const p = await ctx.newPage();
   await p.goto(pathToFileURL(resolve('dist/index.html')).href);
-  await p.evaluate(() => document.querySelectorAll('.rowbtn').forEach(x => x.click()));
-  await p.waitForTimeout(500);
+  await p.waitForTimeout(400);
   const r = await p.evaluate((w) => {
     const bad = [];
     document.querySelectorAll('body *').forEach(n => {
+      // 내부 스크롤 영역(달력)과 화면 밖 드로어는 의도된 것
+      if (n.closest('.plotbox, .drawer, .bar-in')) return;
       const b = n.getBoundingClientRect();
       if (b.width === 0) return;
-      if (b.right > w + 0.5 || b.left < -0.5) bad.push(`${n.tagName}.${n.className}`.slice(0,60) + ` L${b.left|0} R${b.right|0}`);
+      const name = typeof n.className === 'string' ? n.className : n.tagName;
+      if (b.right > w + 0.5 || b.left < -0.5) bad.push(`${n.tagName}.${name}`.slice(0, 60) + ` L${b.left|0} R${b.right|0}`);
     });
     return { bad: [...new Set(bad)].slice(0, 12), sw: document.documentElement.scrollWidth };
   }, w);

@@ -64,6 +64,7 @@ export const people = [
 export const events = [
   {
     id: '0414',
+    venueKey: '선정릉 인근',
     date: '2026-04-14',
     dow: '화',
     month: '04',
@@ -141,6 +142,7 @@ export const events = [
 
   {
     id: '0423',
+    venueKey: '여의도 파크원',
     date: '2026-04-23',
     dow: '목',
     month: '04',
@@ -187,6 +189,7 @@ export const events = [
 
   {
     id: '0425',
+    venueKey: 'AB180',
     date: '2026-04-25',
     dow: '토',
     month: '04',
@@ -338,6 +341,7 @@ export const events = [
 
   {
     id: '0506',
+    venueKey: '드림플러스',
     date: '2026-05-06',
     dow: '수',
     month: '05',
@@ -425,6 +429,7 @@ export const events = [
 
   {
     id: '0513',
+    venueKey: '한강공원',
     date: '2026-05-13',
     dow: '수',
     month: '05',
@@ -472,6 +477,7 @@ export const events = [
 
   {
     id: '0514',
+    venueKey: 'AB180',
     date: '2026-05-14',
     dow: '목',
     month: '05',
@@ -579,6 +585,7 @@ export const events = [
 
   {
     id: '0521',
+    venueKey: '마이크로소프트',
     date: '2026-05-21',
     dow: '목',
     month: '05',
@@ -661,6 +668,7 @@ export const events = [
 
   {
     id: '0528',
+    venueKey: '아셈타워',
     date: '2026-05-28',
     dow: '목',
     month: '05',
@@ -762,6 +770,7 @@ export const events = [
 
   {
     id: '0602',
+    venueKey: '디캠프',
     date: '2026-06-02',
     dow: '화',
     month: '06',
@@ -794,6 +803,7 @@ export const events = [
 
   {
     id: '0609',
+    venueKey: '드림플러스',
     date: '2026-06-09',
     dow: '화',
     month: '06',
@@ -934,6 +944,7 @@ export const events = [
 
   {
     id: '0611',
+    venueKey: '디캠프',
     date: '2026-06-11',
     dow: '목',
     month: '06',
@@ -1024,6 +1035,7 @@ export const events = [
 
   {
     id: '0612',
+    venueKey: '연세대학교',
     date: '2026-06-12',
     dow: '금',
     month: '06',
@@ -1077,6 +1089,7 @@ export const events = [
 
   {
     id: '0618',
+    venueKey: 'AB180',
     date: '2026-06-18',
     dow: '목',
     month: '06',
@@ -1169,6 +1182,7 @@ export const events = [
 
   {
     id: '0619',
+    venueKey: 'WOOMUL',
     date: '2026-06-19',
     dow: '금',
     month: '06',
@@ -1239,6 +1253,7 @@ export const events = [
 
   {
     id: '0625',
+    venueKey: 'MARU 360',
     date: '2026-06-25',
     dow: '목',
     month: '06',
@@ -1285,6 +1300,7 @@ export const events = [
 
   {
     id: '0629',
+    venueKey: '모두의연구소',
     date: '2026-06-29',
     dow: '월',
     month: '06',
@@ -1328,6 +1344,7 @@ export const events = [
 
   {
     id: '0630',
+    venueKey: 'AWS 센터필드',
     date: '2026-06-30',
     dow: '화',
     month: '06',
@@ -1368,6 +1385,7 @@ export const events = [
 
   {
     id: '0702',
+    venueKey: '카페 대관',
     date: '2026-07-02',
     dow: '목',
     month: '07',
@@ -1434,6 +1452,7 @@ export const events = [
 
   {
     id: '0707',
+    venueKey: null,
     date: '2026-07-07',
     dow: '화',
     month: '07',
@@ -1468,6 +1487,7 @@ export const events = [
 
   {
     id: '0709',
+    venueKey: null,
     date: '2026-07-09',
     dow: '목',
     month: '07',
@@ -1502,6 +1522,7 @@ export const events = [
 
   {
     id: '0710',
+    venueKey: '청담동',
     date: '2026-07-10',
     dow: '금',
     month: '07',
@@ -1542,6 +1563,7 @@ export const events = [
 
   {
     id: '0714',
+    venueKey: '싱가포르',
     date: '2026-07-14',
     dow: '화',
     month: '07',
@@ -1581,6 +1603,7 @@ export const events = [
 
   {
     id: '0721',
+    venueKey: '디캠프',
     date: '2026-07-21',
     dow: '화',
     month: '07',
@@ -1627,6 +1650,7 @@ export const events = [
 
   {
     id: '0728',
+    venueKey: '드림플러스',
     date: '2026-07-28',
     dow: '화',
     month: '07',
@@ -1671,6 +1695,7 @@ export const events = [
 
   {
     id: '0806',
+    venueKey: '디캠프',
     date: '2026-08-06',
     dow: '목',
     month: '08',
@@ -1725,6 +1750,7 @@ export const events = [
 
   {
     id: '0813',
+    venueKey: '모두의연구소',
     date: '2026-08-13',
     dow: null,
     month: '08',

@@ -3,7 +3,7 @@
 페이지에 실제로 쓰인 글자만 남겨 웹폰트를 잘라내고, data: URI로 인라인할 수 있는
 @font-face CSS를 만든다.
 
-- Overpass (라틴/숫자, 사이니지 각인 역할): 웨이트별 단일 서브셋
+- Archivo Variable (라틴/숫자): 굵기·너비 두 축을 가진 가변 폰트 하나로 디스플레이와 데이터 라벨을 모두 처리
 - Gothic A1 (한글 디스플레이): fontsource가 100개 unicode-range 조각으로 쪼개 배포하므로
   조각마다 교집합만 남긴 뒤 하나로 병합한다. 조각당 폰트 테이블 오버헤드가 사라져
   용량이 1/2.5로 줄어든다.
@@ -20,8 +20,8 @@ from fontTools import subset
 from fontTools.merge import Merger
 from fontTools.ttLib import TTFont
 
-OVERPASS = [("Overpass", 600), ("Overpass", 700), ("Overpass", 800)]
-GOTHIC = [("Gothic A1", 500), ("Gothic A1", 800)]
+ARCHIVO = ("Archivo", "archivo/archivo-latin-standard-normal.woff2")  # wght 100–900 + wdth 62–125
+GOTHIC = [("Gothic A1", 600), ("Gothic A1", 800)]
 
 # 라틴 파트는 항상 포함 (UI 라벨, 숫자, 구두점이 조건부로 생성될 수 있으므로)
 ALWAYS = set(
@@ -99,13 +99,18 @@ def main():
 
     css, total = [], 0
 
-    for family, w in OVERPASS:
-        src = fonts_dir / "overpass" / f"overpass-latin-{w}-normal.woff2"
-        data = cut(src, chars)
-        if data:
-            css.append(face(family, w, data))
-            total += len(data)
-            print(f"  Overpass {w}: {len(data) / 1024:.1f} KB")
+    family, rel = ARCHIVO
+    data = cut(fonts_dir / rel, chars)
+    if data:
+        # 가변 폰트는 축 범위를 그대로 선언한다
+        b64 = base64.b64encode(data).decode()
+        css.append(
+            f"@font-face{{font-family:'{family}';font-style:normal;font-weight:100 900;"
+            f"font-stretch:62% 125%;font-display:swap;\n"
+            f"  src:url(data:font/woff2;base64,{b64}) format('woff2-variations')}}\n"
+        )
+        total += len(data)
+        print(f"  Archivo variable: {len(data) / 1024:.1f} KB")
 
     tmp = out_css.parent / ".fontparts"
     for family, w in GOTHIC:
