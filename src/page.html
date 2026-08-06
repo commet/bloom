@@ -142,7 +142,7 @@ h1, h2, h3 { margin: 0; font-family: var(--ko); font-weight: 800; letter-spacing
 .bar .sp { margin-left: auto; }
 
 /* ── masthead ────────────────────────────────────────── */
-.mast { padding: clamp(1.8rem, 5vw, 3.4rem) 0 0; }
+.mast { padding-block: clamp(1.8rem, 5vw, 3.4rem) 0; }
 .mast h1 {
   font-family: var(--disp); font-weight: 800; font-variation-settings: "wdth" 112;
   font-size: clamp(2.4rem, 8.5vw, 5rem); letter-spacing: -.045em; line-height: .92;
@@ -705,9 +705,9 @@ function drawCalendar() {
   const cs = getComputedStyle(box);
   const avail = box.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) - 2;
   const narrow = avail < 520;
-  const LEFT = narrow ? 18 : 24, MARG = narrow ? 56 : 92, GAPC = narrow ? 3 : 4, TOP = 24;
+  const LEFT = narrow ? 18 : 24, MARG = narrow ? 64 : 92, GAPC = narrow ? 3 : 4, TOP = 24;
   const cellCap = drawCalendar.cap || 40;
-  const cell = Math.max(10, Math.min(cellCap, Math.floor((avail - LEFT - MARG - GAPC * (WEEKS - 1)) / WEEKS)));
+  const cell = Math.max(8, Math.min(cellCap, Math.floor((avail - LEFT - MARG - GAPC * (WEEKS - 1)) / WEEKS)));
   const step = cell + GAPC;
   const gridW = WEEKS * step - GAPC;
   const W = LEFT + gridW + MARG;
@@ -764,7 +764,7 @@ function drawCalendar() {
   }
 
   /* 요일별 합계 — 세로축을 공유하는 주변 분포 */
-  const mx = LEFT + gridW + (narrow ? 12 : 22), mw = MARG - (narrow ? 26 : 40);
+  const mx = LEFT + gridW + (narrow ? 10 : 22), mw = MARG - (narrow ? 36 : 40);
   const cap = sv('text', { class: 'cap', x: mx, y: TOP - 9 });
   cap.textContent = '요일 합계';
   svg.append(cap);
