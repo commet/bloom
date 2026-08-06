@@ -177,7 +177,7 @@ section { padding-top: clamp(2.4rem, 6vw, 4rem); scroll-margin-top: 52px; }
 .shead .note { font-size: .8rem; color: var(--text-muted); }
 
 /* ── calendar plot ───────────────────────────────────── */
-.plotbox { position: relative; overflow-x: auto; overflow-y: hidden; margin-inline: calc(var(--pad) * -1); padding-inline: var(--pad); }
+.plotbox { position: relative; overflow-x: auto; overflow-y: hidden; margin-inline: calc(var(--pad) * -1); padding: 6px var(--pad) 4px; }
 #cal { display: block; }
 #cal text { font-family: var(--disp); font-variant-numeric: tabular-nums; }
 #cal .mon { fill: var(--text-primary); font-size: 12px; font-weight: 700; letter-spacing: -.01em; }
@@ -724,9 +724,16 @@ function bindCells(svg) {
       const r = c.getBoundingClientRect(), b = box.getBoundingClientRect();
       tip.innerHTML = `<b>${md(e)}</b> ${T(e.short)}<br>${e.venue ? esc(e.venue) : '장소 기록 없음'}`;
       tip.classList.add('on');
-      tip.style.left = Math.max(r.left - b.left + box.scrollLeft - 40, 4) + 'px';
-      tip.style.top = (r.top - b.top - 8) + 'px';
-      tip.style.transform = 'translateY(-100%)';
+      tip.style.transform = 'none';
+      tip.style.left = '0px';
+      tip.style.top = '0px';
+
+      /* 위쪽 행은 툴팁이 달력 박스 밖으로 잘린다 — 공간이 없으면 칸 아래로 뒤집는다 */
+      const th = tip.offsetHeight, tw = tip.offsetWidth;
+      const above = r.top - b.top - 8 - th;
+      tip.style.top = (above >= 2 ? above : r.bottom - b.top + 8) + 'px';
+      const maxLeft = Math.max(box.scrollWidth - tw - 4, 4);
+      tip.style.left = Math.min(Math.max(r.left - b.left + box.scrollLeft - 40, 4), maxLeft) + 'px';
     };
     const hide = () => tip.classList.remove('on');
     c.addEventListener('mouseenter', show);
