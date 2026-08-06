@@ -1,0 +1,37 @@
+# dist/index.html 은 저장소에 커밋된 배포 산출물이고 Vercel 은 이것을 그대로 서빙한다.
+# src/ 만 고치고 `node build.mjs` 를 잊은 채 푸시하면 배포에 반영되지 않으므로,
+# 두 곳이 같은 푸시에서 함께 바뀌었는지 확인한다.
+name: dist 최신성 확인
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 소스가 바뀌었는데 dist 가 그대로인지 확인
+        run: |
+          base="${{ github.event.before }}"
+          if [ -z "$base" ] || [ "$base" = "0000000000000000000000000000000000000000" ]; then
+            base=$(git rev-parse HEAD~1 2>/dev/null || echo "")
+          fi
+          [ -z "$base" ] && { echo "비교 대상 없음 — 건너뜀"; exit 0; }
+
+          changed=$(git diff --name-only "$base" HEAD)
+          echo "$changed" | sed 's/^/  /'
+
+          src=$(echo "$changed" | grep -E '^(src/|build\.mjs|tools/subset_fonts\.py)' || true)
+          dist=$(echo "$changed" | grep -E '^dist/index\.html' || true)
+
+          if [ -n "$src" ] && [ -z "$dist" ]; then
+            echo "::error::소스가 바뀌었는데 dist/index.html 이 그대로입니다. \`node build.mjs\` 를 돌려 함께 커밋하세요."
+            exit 1
+          fi
+          echo "확인 완료"

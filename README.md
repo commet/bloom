@@ -9,19 +9,28 @@ Bloom 커뮤니티의 2026년 4월 14일 – 8월 6일 기록을 한 페이지�
 
 ## 배포 (Vercel)
 
-`dist/index.html` 하나만 있으면 되므로 빌드 단계 없이 정적으로 올린다.
+**푸시하면 자동 배포된다.** 최초 1회만 vercel.com/new 에서 이 저장소를 Import 하면 되고,
+그다음부터는 프로덕션 브랜치에 푸시할 때마다 Vercel 이 배포한다.
 
-```bash
-vercel            # 미리보기
-vercel --prod     # 배포
+`vercel.json` 에 설치·빌드 명령이 **빈 문자열**로 지정돼 있어 Vercel 은 아무것도 빌드하지 않고
+`dist/` 를 그대로 서빙한다. `null` 은 "빌드 없음"이 아니라 "자동 감지"라서, 그대로 두면 Vercel 이
+`npm run build` 를 실행하다 실패한다.
+
+```json
+{ "installCommand": "", "buildCommand": "", "outputDirectory": "dist" }
 ```
 
-`vercel.json`이 `outputDirectory: dist`, 빌드·설치 명령 없음으로 잡혀 있다. GitHub 연동으로 붙일
-때도 Framework Preset은 **Other**, Output Directory는 **dist**, Build Command는 비워 두면 된다.
-폰트까지 인라인돼 있어 외부 요청이 0건이므로 CDN 설정이 따로 필요 없다.
+`dist/index.html` 은 폰트까지 인라인된 완성본이라 외부 요청이 0건이고, 별도 CDN 설정이 필요 없다.
 
-`dist/index.html`은 저장소에 커밋한다 — 배포 아티팩트가 곧 소스의 산출물이다. 데이터나 페이지를
-고쳤으면 `node build.mjs`를 다시 돌려 커밋해야 배포에 반영된다.
+### 주의 — 빌드는 로컬에서 한다
+
+배포 산출물을 저장소에 커밋하는 방식이므로, `src/` 만 고치고 푸시하면 배포에 반영되지 않는다.
+
+```bash
+FONTS_DIR=... node build.mjs && git add dist/index.html
+```
+
+`.github/workflows/dist-freshness.yml` 이 소스만 바뀐 푸시를 실패시켜 이 실수를 막는다.
 
 ## 만들기
 
