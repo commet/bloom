@@ -15,6 +15,21 @@ the verdict, and DESIGN.md.
 <title>Bloom 아카이브 · 2026.04 — 08</title>
 <meta name="description" content="Bloom 커뮤니티가 2026년 4월부터 8월까지 빌린 방들의 기록. 25회 이상의 행사, 조별 토론, 공개 회고를 원문 그대로 모았다.">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+/* 이 파일이 다른 문서의 <body> 안으로 감싸여 게시되면 위 태그들이 <head>에 들어가지 못한다.
+   최초 페인트 전에 head로 옮겨 모바일 뷰포트와 문서 제목을 지킨다. */
+(function () {
+  var d = document, h = d.head;
+  d.documentElement.lang = 'ko';
+  if (!h.querySelector('meta[name="viewport"]')) {
+    var m = d.createElement('meta');
+    m.name = 'viewport';
+    m.content = 'width=device-width, initial-scale=1, viewport-fit=cover';
+    h.appendChild(m);
+  }
+  if (!d.title) d.title = 'Bloom 아카이브 · 2026.04 — 08';
+})();
+</script>
 
 <style>/*__FONTS__*/</style>
 
@@ -589,8 +604,6 @@ button.tag:hover { color: var(--brass); border-color: var(--brass); }
 </main>
 
 <script>
-document.documentElement.lang = 'ko';
-
 const D = /*__DATA__*/;
 
 /* ── helpers ─────────────────────────────────────────────── */
